@@ -96,10 +96,6 @@ public class MainActivity extends ListActivity {
 		}
 	};
 
-	private void listRestaurants() {
-		Response<RestaurantList> list = resService.searchRestaurants("", "");
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
