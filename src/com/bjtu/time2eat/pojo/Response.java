@@ -2,7 +2,9 @@ package com.bjtu.time2eat.pojo;
 
 import java.io.Serializable;
 
-public class Response implements Serializable {
+import com.bjtu.time2eat.pojo.resbody.IResponseBody;
+
+public class Response<R extends IResponseBody> implements Serializable {
 
 	/**
 	 * 
@@ -10,7 +12,7 @@ public class Response implements Serializable {
 	private static final long serialVersionUID = 8894732207138584616L;
 	private Status status;
 	private Page page;
-	private Data data;
+	private R data;
 
 	public Status getStatus() {
 		return status;
@@ -28,11 +30,11 @@ public class Response implements Serializable {
 		this.page = page;
 	}
 
-	public Data getData() {
+	public R getData() {
 		return data;
 	}
 
-	public void setData(Data data) {
+	public void setData(R data) {
 		this.data = data;
 	}
 

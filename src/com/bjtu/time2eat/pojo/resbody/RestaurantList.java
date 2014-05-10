@@ -5,15 +5,21 @@ import java.util.List;
 
 import com.bjtu.time2eat.pojo.Merchant;
 
-public class RestaurantList implements IResponseBody {
-	private List<Merchant> detail = new LinkedList<Merchant>();
+/**
+ * 查询附近餐馆列表Response Body
+ * 
+ * @author licb
+ * 
+ */
+public class RestaurantList extends IResponseBody {
+	private List<Merchant> result = new LinkedList<Merchant>();
 
-	public List<Merchant> getDetail() {
-		return detail;
+	public List<Merchant> getResult() {
+		return result;
 	}
 
-	public void setDetail(List<Merchant> detail) {
-		this.detail = detail;
+	public void setResult(List<Merchant> result) {
+		this.result = result;
 	}
 
 }
