@@ -5,8 +5,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.client.ClientProtocolException;
-
 import com.bjtu.time2eat.pojo.Response;
 import com.bjtu.time2eat.pojo.resbody.UserOrderHistory;
 import com.bjtu.time2eat.util.HttpUtils;
@@ -23,16 +21,13 @@ public class UserService {
 		params.put("mobile", mobile);
 
 		try {
-			String json = HttpUtils.fetchResponseByPostWithUrlEncodedFormEntity(action, params, "UTF-8");
+			String json = HttpUtils.fetchResponseByGet(action, params, "UTF-8");
 
 			Type type = new TypeToken<Response<UserOrderHistory>>() {
 			}.getType();
 			Response<UserOrderHistory> resp = gson.fromJson(json, type);
 
 			return resp;
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

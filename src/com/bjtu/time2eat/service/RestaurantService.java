@@ -5,8 +5,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.client.ClientProtocolException;
-
 import com.bjtu.time2eat.pojo.Response;
 import com.bjtu.time2eat.pojo.resbody.RestaurantDetail;
 import com.bjtu.time2eat.pojo.resbody.RestaurantList;
@@ -64,7 +62,7 @@ public class RestaurantService {
 
 		try {
 			String json = HttpUtils
-					.fetchResponseByPostWithUrlEncodedFormEntity(action,
+					.fetchResponseByGet(action,
 							params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantDetail>>() {
@@ -72,9 +70,6 @@ public class RestaurantService {
 			Response<RestaurantDetail> resp = gson.fromJson(json, type);
 
 			return resp;
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,7 +91,7 @@ public class RestaurantService {
 
 		try {
 			String json = HttpUtils
-					.fetchResponseByPostWithUrlEncodedFormEntity(action,
+					.fetchResponseByGet(action,
 							params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantMenu>>() {
@@ -104,9 +99,6 @@ public class RestaurantService {
 			Response<RestaurantMenu> resp = gson.fromJson(json, type);
 
 			return resp;
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -138,7 +130,7 @@ public class RestaurantService {
 
 		try {
 			String json = HttpUtils
-					.fetchResponseByPostWithUrlEncodedFormEntity(action,
+					.fetchResponseByGet(action,
 							params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantOrder>>() {
@@ -146,9 +138,6 @@ public class RestaurantService {
 			Response<RestaurantOrder> resp = gson.fromJson(json, type);
 
 			return resp;
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
