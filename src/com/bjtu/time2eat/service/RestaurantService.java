@@ -34,16 +34,15 @@ public class RestaurantService {
 		params.put("lon", lon);
 
 		try {
-			String json = HttpUtils.fetchResponseByPostWithUrlEncodedFormEntity(action, params, "UTF-8");
-
+			// String json =
+			// HttpUtils.fetchResponseByPostWithUrlEncodedFormEntity(action,
+			// params, "UTF-8");
+			String json = HttpUtils.fetchResponseByGet(action, params, "UTF-8");
 			Type type = new TypeToken<Response<RestaurantList>>() {
 			}.getType();
 			Response<RestaurantList> resp = gson.fromJson(json, type);
 
 			return resp;
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +63,9 @@ public class RestaurantService {
 		params.put("id", id);
 
 		try {
-			String json = HttpUtils.fetchResponseByPostWithUrlEncodedFormEntity(action, params, "UTF-8");
+			String json = HttpUtils
+					.fetchResponseByPostWithUrlEncodedFormEntity(action,
+							params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantDetail>>() {
 			}.getType();
@@ -94,7 +95,9 @@ public class RestaurantService {
 		params.put("id", id);
 
 		try {
-			String json = HttpUtils.fetchResponseByPostWithUrlEncodedFormEntity(action, params, "UTF-8");
+			String json = HttpUtils
+					.fetchResponseByPostWithUrlEncodedFormEntity(action,
+							params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantMenu>>() {
 			}.getType();
@@ -123,7 +126,8 @@ public class RestaurantService {
 	 * @param time
 	 * @return
 	 */
-	public Response<RestaurantOrder> restaurantOrder(String id, String mobile, String foods, String date, String time) {
+	public Response<RestaurantOrder> restaurantOrder(String id, String mobile,
+			String foods, String date, String time) {
 		String action = "restaurant_menu";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", id);
@@ -133,7 +137,9 @@ public class RestaurantService {
 		params.put("time", time);
 
 		try {
-			String json = HttpUtils.fetchResponseByPostWithUrlEncodedFormEntity(action, params, "UTF-8");
+			String json = HttpUtils
+					.fetchResponseByPostWithUrlEncodedFormEntity(action,
+							params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantOrder>>() {
 			}.getType();
