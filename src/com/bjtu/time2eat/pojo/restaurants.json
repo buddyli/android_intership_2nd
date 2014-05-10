@@ -1,0 +1,81 @@
+{
+    "status": {
+        "code": "0",
+        "message": "SUCCESS"
+    },
+    "page": {
+        "ps": "10",
+        "pn": "1",
+        "pc": "20",
+        "rc": "200"
+    },
+    "data": {
+        "result": [
+            {
+                "price": "",
+                "address": "环球贸易中心C座",
+                "lat": "",
+                "telno": "010-8888888",
+                "id": "5365b8c55ce41b27b897e008",
+                "distance": "",
+                "name": "七彩云南",
+                "lon": "",
+                "trade_name": "",
+                "landmark": "",
+                "m_star": ""
+            },
+            {
+                "price": "",
+                "address": "北京北三环",
+                "lat": "",
+                "telno": "15210078395",
+                "id": "5369efa75ce41b426b3a5f74",
+                "distance": "",
+                "name": "金鼎轩",
+                "lon": "",
+                "trade_name": "",
+                "landmark": "",
+                "m_star": ""
+            },
+            {
+                "price": "",
+                "address": "交大东路8号",
+                "lat": "",
+                "telno": "010-666778888",
+                "id": "536a2aa05ce41b6d13c35653",
+                "distance": "",
+                "name": "好熟悉家常菜",
+                "lon": "",
+                "trade_name": "",
+                "landmark": "",
+                "m_star": ""
+            },
+            {
+                "price": "",
+                "address": "交大南门18号",
+                "lat": "",
+                "telno": "010-12345678",
+                "id": "536a2abe5ce41b6d13c35654",
+                "distance": "",
+                "name": "新疆拉面",
+                "lon": "",
+                "trade_name": "",
+                "landmark": "",
+                "m_star": ""
+            },
+            {
+                "price": "",
+                "address": "白庙路甲八号",
+                "lat": "",
+                "telno": "13800138000",
+                "id": "536a5e9f06e93b1547b4f33d",
+                "distance": "",
+                "name": "嘉禾一品粥",
+                "lon": "",
+                "trade_name": "",
+                "landmark": "",
+                "m_star": ""
+            }
+        ]
+    }
+}

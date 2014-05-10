@@ -1,0 +1,44 @@
+{
+    "status": {
+        "code": "0",
+        "message": "SUCCESS"
+    },
+    "page": {
+        "ps": "10",
+        "pn": "1",
+        "pc": "20",
+        "rc": "200"
+    },
+    "data": {
+        "detail": {
+            "price": "",
+            "address": "环球贸易中心C座",
+            "lat": "",
+            "telno": "010-8888888",
+            "id": "5365b8c55ce41b27b897e008",
+            "distance": "",
+            "name": "七彩云南",
+            "lon": "",
+            "trade_name": "",
+            "landmark": "",
+            "m_star": ""
+        },
+        "menus": [
+            {
+                "price": "14",
+                "id": "536845ee5ce41b195d116213",
+                "name": "清炒土豆丝"
+            },
+            {
+                "price": "188",
+                "id": "5368461d5ce41b195d116214",
+                "name": "精品水煮鱼"
+            },
+            {
+                "price": "48",
+                "id": "5368464f5ce41b195d116215",
+                "name": "精品炒饭"
+            }
+        ]
+    }
+}

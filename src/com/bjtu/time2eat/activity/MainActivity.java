@@ -1,4 +1,4 @@
-package com.bjtu.time2eat;
+package com.bjtu.time2eat.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
