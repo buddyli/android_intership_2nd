@@ -2,6 +2,7 @@ package com.bjtu.time2eat.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,6 +48,8 @@ public class MainActivity extends ListActivity {
 		case 1:
 			Toast.makeText(MainActivity.this, "地图模式", Toast.LENGTH_SHORT)
 					.show();
+			Intent intent = new Intent(this, MapActivity.class);
+			startActivity(intent);
 			break;
 		case 2:
 			Toast.makeText(MainActivity.this, "预订历史", Toast.LENGTH_SHORT)
