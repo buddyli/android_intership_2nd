@@ -1,11 +1,8 @@
 package com.bjtu.time2eat.activity;
 
-import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,16 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.bjtu.time2eat.pojo.Merchant;
-import com.bjtu.time2eat.pojo.Response;
-import com.bjtu.time2eat.pojo.resbody.RestaurantList;
-import com.bjtu.time2eat.service.RestaurantService;
-import com.bjtu.time2eat.service.UserService;
 import com.example.time2eat.R;
 
 public class MainActivity extends ListActivity {
-	private RestaurantService resService = new RestaurantService();
-	private UserService userService = new UserService();
+
+	private String[] menuItems = { "商户列表", "地图模式", "预订历史" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,29 +23,33 @@ public class MainActivity extends ListActivity {
 		// Use an existing ListAdapter that will map an array
 		// of strings to TextViews
 		setListAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, new String[] { "商户列表",
-						"地图模式", "预订历史" }));
+				android.R.layout.simple_list_item_1, menuItems));
 		getListView().setTextFilterEnabled(true);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
+		Intent intent = null;
 		switch (position) {
 		case 0:
-			Toast.makeText(MainActivity.this, "商户列表", Toast.LENGTH_SHORT)
+			Toast.makeText(MainActivity.this, menuItems[0], Toast.LENGTH_SHORT)
 					.show();
-			new Thread(runnable).start();
+			// new Thread(runnable).start();
+			intent = new Intent(this, RestaurantsActivity.class);
+			startActivity(intent);
 			break;
 		case 1:
-			Toast.makeText(MainActivity.this, "地图模式", Toast.LENGTH_SHORT)
+			Toast.makeText(MainActivity.this, menuItems[1], Toast.LENGTH_SHORT)
 					.show();
-			Intent intent = new Intent(this, MapActivity.class);
+			intent = new Intent(this, MapActivity.class);
 			startActivity(intent);
 			break;
 		case 2:
-			Toast.makeText(MainActivity.this, "预订历史", Toast.LENGTH_SHORT)
+			Toast.makeText(MainActivity.this, menuItems[2], Toast.LENGTH_SHORT)
 					.show();
+			intent = new Intent(this, UserActivity.class);
+			startActivity(intent);
 			break;
 		default:
 			super.onListItemClick(l, v, position, id);
@@ -61,43 +57,6 @@ public class MainActivity extends ListActivity {
 		}
 
 	}
-
-	@SuppressLint("HandlerLeak")
-	Handler hander = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			Bundle bundle = msg.getData();
-			String[] txt = (String[]) bundle.get("merchants");
-			setListAdapter(new ArrayAdapter<String>(MainActivity.this,
-					android.R.layout.simple_list_item_1, txt));
-			getListView().setTextFilterEnabled(true);
-		}
-	};
-
-	Runnable runnable = new Runnable() {
-
-		@Override
-		public void run() {
-			Response<RestaurantList> list = resService
-					.searchRestaurants("", "");
-			Message msg = new Message();
-			if (list != null && list.getData() != null
-					&& list.getData().getResult() != null) {
-				Bundle bundle = new Bundle();
-				String[] merchants = new String[list.getData().getResult()
-						.size()];
-				int i = 0;
-				for (Merchant merchant : list.getData().getResult()) {
-					merchants[i++] = merchant.getName();
-				}
-				bundle.putCharSequenceArray("merchants", merchants);
-				msg.setData(bundle);
-			}
-			hander.sendMessage(msg);
-		}
-	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
