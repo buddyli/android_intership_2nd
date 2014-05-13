@@ -110,7 +110,8 @@ public class LocationOverlayActivity extends Activity {
 		// 地图初始化
 		mMapView = (MyLocationMapView) findViewById(R.id.bmapView);
 		mMapController = mMapView.getController();
-		mMapView.getController().setZoom(14);
+		// 地图缩放级别，取值范围3-19
+		mMapView.getController().setZoom(17);
 		mMapView.getController().enableClick(true);
 		mMapView.setBuiltInZoomControls(true);
 		// 创建 弹出泡泡图层
