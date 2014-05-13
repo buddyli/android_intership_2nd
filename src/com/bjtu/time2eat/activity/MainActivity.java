@@ -21,7 +21,7 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
 		// Use an existing ListAdapter that will map an array
-		// of strings to TextViews
+		// of strings to TextViews sea
 		setListAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, menuItems));
 		getListView().setTextFilterEnabled(true);
