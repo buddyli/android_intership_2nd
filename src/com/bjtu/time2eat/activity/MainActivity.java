@@ -42,7 +42,7 @@ public class MainActivity extends ListActivity {
 		case 1:
 			Toast.makeText(MainActivity.this, menuItems[1], Toast.LENGTH_SHORT)
 					.show();
-			intent = new Intent(this, MapActivity.class);
+			intent = new Intent(this, LocationOverlayActivity.class);
 			startActivity(intent);
 			break;
 		case 2:

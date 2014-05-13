@@ -16,12 +16,15 @@
         android:targetSdkVersion="19" />
 
     <!-- 使用网络功能所需权限 -->
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
     </uses-permission>
     <uses-permission android:name="android.permission.INTERNET" >
     </uses-permission>
+    <!-- 用于访问wifi网络信息,wifi信息会用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
     </uses-permission>
+    <!-- 这个权限用于获取wifi的获取权限,wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
     </uses-permission>
     <!-- SDK离线地图和cache功能需要读写外部存储器 -->
@@ -35,7 +38,13 @@
     <uses-permission android:name="android.permission.CALL_PHONE" >
     </uses-permission>
     <!-- 使用定位功能所需权限,demo已集成百度定位SDK,不使用定位功能可去掉以下6项 -->
+    <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
+    </uses-permission> <!-- 允许应用读取低级别的系统日志文件 -->
+    <uses-permission android:name="android.permission.READ_LOGS" >
     </uses-permission>
 
     <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
@@ -43,6 +52,7 @@
 
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
     </uses-permission>
+    <!-- 这个权限用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" >
@@ -56,6 +66,7 @@
         android:required="true" />
 
     <application
+        android:name="com.bjtu.time2eat.activity.DemoApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -66,6 +77,12 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="xgQIOtUfqGy8wUu4aEOW29In" >
         </meta-data>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
 
         <activity
             android:name="com.bjtu.time2eat.activity.MainActivity"
@@ -81,6 +98,12 @@
             android:label="@string/map_example" >
         </activity>
         <activity
+            android:name="com.bjtu.time2eat.activity.LocationOverlayActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/demo_name_location"
+            android:screenOrientation="sensor" >
+        </activity>
+        <activity
             android:name="com.bjtu.time2eat.activity.UserActivity"
             android:label="@string/app_name" >
         </activity>
@@ -88,7 +111,6 @@
             android:name="com.bjtu.time2eat.activity.RestaurantsActivity"
             android:label="@string/app_name" >
         </activity>
-
         <!-- Google地图访问key, 注意，仅仅是debug key -->
         <!--
         <meta-data
