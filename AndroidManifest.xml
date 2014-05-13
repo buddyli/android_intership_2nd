@@ -72,7 +72,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <!-- 百度地图访问key -->
+        <!-- 百度地图访问key，如果大家要在自己的手机上查看地图效果，需要把这个值替换成自己的key -->
+        <!-- 申请key参考链接:http://bbs.lbsyun.baidu.com/viewthread.php?tid=4389&extra=page%3D1 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="xgQIOtUfqGy8wUu4aEOW29In" >
