@@ -28,6 +28,7 @@ import com.example.time2eat.R;
 
 @SuppressLint("HandlerLeak") public class RestaurantListActivity extends ListActivity {
 
+	String [] restInfo;
 	ProgressDialog m_pDialog;
 	private List<Map<String, Object>> list = null;
 	private RestaurantService resService = new RestaurantService();
@@ -40,12 +41,15 @@ import com.example.time2eat.R;
 					int position, long id) {        		
 				 Intent intent = new Intent();
 				 intent.setClass(RestaurantListActivity.this, RestaurantDetailActivity.class);		
-				 intent.putExtra("id", list.get(position).get("id")
-				 .toString());
-				 intent.putExtra("name", list.get(position).get("name")
-				 .toString());
+				 intent.putExtra("id", restInfo[0]);
+				 intent.putExtra("name",restInfo[1]);
+				 intent.putExtra("address",restInfo[2]);
+				// intent.putExtra("name", list.get(position).get("name").toString());
+				// intent.putExtra("address", list.get(position).get("address").toString());
+				// intent.putExtra("price", list.get(position).get("price").toString());
+				// intent.putExtra("telphone", list.get(position).get("telphone").toString());				 
 				 startActivity(intent);
-        		Toast.makeText(getApplicationContext(), "211212", Toast.LENGTH_SHORT).show();
+        		//Toast.makeText(getApplicationContext(), "211212", Toast.LENGTH_SHORT).show();
 
 			}
 		});
@@ -90,7 +94,7 @@ import com.example.time2eat.R;
 			Bundle bundle = msg.getData();			
 			String[] txt = (String[]) bundle.get("merchants");			
 			list=new ArrayList<Map<String,Object>>();
-			String [] restInfo;
+			
 			//Toast.makeText(getApplicationContext(),txt[0], Toast.LENGTH_SHORT).show();
 			for (int i = 0; i < txt.length; i++) {	
 				restInfo=txt[i].split("\\|");//将获得的字符串
@@ -100,7 +104,7 @@ import com.example.time2eat.R;
 				map.put("id",restInfo[0]);
 				map.put("name", restInfo[1]);
 				map.put("address", restInfo[2]);
-				//map.put("price", restInfo[3]);
+				//map.put("price", restInfo[2]);
     		//
 				list.add(map);
 			}/**/
@@ -110,14 +114,7 @@ import com.example.time2eat.R;
 			SimpleAdapter adapter = new SimpleAdapter(RestaurantListActivity.this,list, R.layout.restlistitem,
 					new String[] {"id","name","address"},
 					new int[] { R.id.restaurantid, R.id.restaurantname,R.id.restaurantaddress});
-			setListAdapter(adapter);
-//			
-//			setListAdapter(new ArrayAdapter<String>(RestListActivity.this,
-//					android.R.layout.simple_list_item_1, txt));
-//			getListView().setTextFilterEnabled(true);
-
-    	//	Toast.makeText(getApplicationContext(), restInfo[1], Toast.LENGTH_SHORT).show();
-			
+			setListAdapter(adapter);		
 		}
 	};
 
@@ -135,7 +132,7 @@ import com.example.time2eat.R;
 						.size()];
 				int i = 0;
 				for (Merchant merchant : list.getData().getResult()) {
-					merchants[i++] = merchant.getId()+"|"+merchant.getName()+"|"+merchant.getAddress()+"|"+merchant.getPrice();
+					merchants[i++] = merchant.getId()+"|"+merchant.getName()+"|"+merchant.getAddress()+"|"+merchant.getPrice()+"|"+merchant.getTelno();
 					//merchants[i++] = merchant.getAddress();
 				}
 				bundle.putCharSequenceArray("merchants", merchants);
