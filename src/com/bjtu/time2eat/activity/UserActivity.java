@@ -2,6 +2,11 @@ package com.bjtu.time2eat.activity;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -10,13 +15,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.bjtu.time2eat.pojo.Order;
 import com.bjtu.time2eat.pojo.Response;
 import com.bjtu.time2eat.pojo.resbody.UserOrderHistory;
 import com.bjtu.time2eat.service.UserService;
+import com.example.time2eat.R;
 
 /**
  * 用户预订餐馆、加载预订历史等Activity
@@ -88,8 +94,25 @@ public class UserActivity extends ListActivity {
 			}
 			Bundle bundle = msg.getData();
 			String[] txt = (String[]) bundle.get("orders");
-			setListAdapter(new ArrayAdapter<String>(UserActivity.this,
-					android.R.layout.simple_list_item_1, txt));
+			String[] orders;
+			List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+			for (int i = 0; i < txt.length; i++) {	
+				orders=txt[i].split("\\|");
+				Map<String, Object> map = new HashMap<String, Object>();
+				map = new HashMap<String, Object>();				
+				map.put("datetime",orders[0]);
+				map.put("name", orders[1]);
+				map.put("cost", "￥"+orders[2]);
+				map.put("status", orders[3]);
+				list.add(map);
+			}
+			SimpleAdapter adapter = new SimpleAdapter(UserActivity.this,list, R.layout.order_history,
+					new String[] {"datetime","name","cost","status"},
+					new int[] {R.id.datetime,R.id.name,R.id.cost,R.id.status });
+			setListAdapter(adapter);
+			
+/*			//setListAdapter(new ArrayAdapter<String>(UserActivity.this,
+					android.R.layout.simple_list_item_1, txt));*/
 			getListView().setTextFilterEnabled(true);
 		}
 	};
@@ -108,8 +131,7 @@ public class UserActivity extends ListActivity {
 						.size()];
 				int i = 0;
 				for (Order order : list.getData().getHistory()) {
-					merchants[i++] = order.getName() + ", 消费: "
-							+ order.getCost() + " 元。";
+					merchants[i++] = order.getDatetime()+"|"+order.getName()+"|"+order.getCost()+"|"+order.getStatus();
 				}
 				bundle.putCharSequenceArray("orders", merchants);
 				msg.setData(bundle);
