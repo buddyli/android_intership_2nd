@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
          mLocalActivityManager.dispatchCreate(savedInstanceState);  
          tabHost.setup(mLocalActivityManager);  
          Intent intent1=new Intent(this, RestaurantListActivity.class); 
-         Intent intent2=new Intent(this, MapActivity.class);         
+         Intent intent2=new Intent(this, LocationOverlayActivity.class);         
          Intent intent3=new Intent(this, UserActivity.class);    
         // Intent intent4=new Intent(this, RestaurantListActivity.class); 
         tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("商户列表").setContent(intent1));
