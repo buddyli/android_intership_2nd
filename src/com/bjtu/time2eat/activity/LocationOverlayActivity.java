@@ -49,6 +49,7 @@ import com.example.time2eat.R;
  * 此demo用来展示如何结合定位SDK实现定位，并使用MyLocationOverlay绘制定位位置 同时展示如何使用自定义图标绘制并点击时弹出泡泡
  * 
  */
+@SuppressLint("ShowToast")
 public class LocationOverlayActivity extends Activity {
 	private RestaurantService resService = new RestaurantService();
 
@@ -128,7 +129,7 @@ public class LocationOverlayActivity extends Activity {
 		mMapView = (MyLocationMapView) findViewById(R.id.bmapView);
 		mMapController = mMapView.getController();
 		// 地图缩放级别，取值范围3-19
-		mMapView.getController().setZoom(17);
+		mMapView.getController().setZoom(15);
 		mMapView.getController().enableClick(true);
 		mMapView.setBuiltInZoomControls(true);
 		// 创建 弹出泡泡图层
@@ -357,45 +358,6 @@ public class LocationOverlayActivity extends Activity {
 		mMapView.getOverlays().add(itemOverlay);
 		mMapView.refresh();
 
-		// 准备要添加的Overlay
-		// double mLat1 = 39.90923;
-		// double mLon1 = 116.397428;
-		// double mLat2 = 39.9022;
-		// double mLon2 = 116.3922;
-		// double mLat3 = 39.917723;
-		// double mLon3 = 116.3722;
-		// // 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
-		// GeoPoint p1 = new GeoPoint((int) (mLat1 * 1E6), (int) (mLon1 * 1E6));
-		// GeoPoint p2 = new GeoPoint((int) (mLat2 * 1E6), (int) (mLon2 * 1E6));
-		// GeoPoint p3 = new GeoPoint((int) (mLat3 * 1E6), (int) (mLon3 * 1E6));
-		// // 准备overlay图像数据，根据实情情况修复
-		// Drawable mark = getResources().getDrawable(R.drawable.icon_marka);
-		// // 用OverlayItem准备Overlay数据
-		// OverlayItem item1 = new OverlayItem(p1, "item1", "item1");
-		// // 使用setMarker()方法设置overlay图片,如果不设置则使用构建ItemizedOverlay时的默认设置
-		// OverlayItem item2 = new OverlayItem(p2, "item2", "item2");
-		// item2.setMarker(mark);
-		// OverlayItem item3 = new OverlayItem(p3, "item3", "item3");
-		//
-		// // 创建IteminizedOverlay
-		// OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
-		// // 将IteminizedOverlay添加到MapView中
-		//
-		// mMapView.getOverlays().clear();
-		// mMapView.getOverlays().add(itemOverlay);
-		//
-		// // 现在所有准备工作已准备好，使用以下方法管理overlay.
-		// // 添加overlay, 当批量添加Overlay时使用addItem(List<OverlayItem>)效率更高
-		// itemOverlay.addItem(item1);
-		// itemOverlay.addItem(item2);
-		// itemOverlay.addItem(item3);
-		// mMapView.refresh();
-		// 删除overlay .
-		// itemOverlay.removeItem(itemOverlay.getItem(0));
-		// mMapView.refresh();
-		// 清除overlay
-		// itemOverlay.removeAll();
-		// mMapView.refresh();
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -439,6 +401,30 @@ public class LocationOverlayActivity extends Activity {
 			hander.sendMessage(msg);
 		}
 	};
+
+	/*
+	 * 要处理overlay点击事件时需要继承ItemizedOverlay 不处理点击事件时可直接生成ItemizedOverlay.
+	 */
+	class OverlayTest extends ItemizedOverlay<OverlayItem> {
+		// 用MapView构造ItemizedOverlay
+		public OverlayTest(Drawable mark, MapView mapView) {
+			super(mark, mapView);
+		}
+
+		protected boolean onTap(int index) {
+			// 在此处理item点击事件
+			OverlayItem item = getItem(index);
+			Toast.makeText(LocationOverlayActivity.this, item.getTitle(),
+					Toast.LENGTH_SHORT);
+			return true;
+		}
+
+		public boolean onTap(GeoPoint pt, MapView mapView) {
+			// 在此处理MapView的点击事件，当返回 true时
+			super.onTap(pt, mapView);
+			return false;
+		}
+	}
 }
 
 /**
@@ -472,33 +458,4 @@ class MyLocationMapView extends MapView {
 		}
 		return true;
 	}
-}
-
-/*
- * 要处理overlay点击事件时需要继承ItemizedOverlay 不处理点击事件时可直接生成ItemizedOverlay.
- */
-class OverlayTest extends ItemizedOverlay<OverlayItem> {
-	// 用MapView构造ItemizedOverlay
-	public OverlayTest(Drawable mark, MapView mapView) {
-		super(mark, mapView);
-	}
-
-	protected boolean onTap(int index) {
-		// 在此处理item点击事件
-		System.out.println("item onTap: " + index);
-		return true;
-	}
-
-	public boolean onTap(GeoPoint pt, MapView mapView) {
-		// 在此处理MapView的点击事件，当返回 true时
-		super.onTap(pt, mapView);
-		return false;
-	}
-	// 自2.1.1 开始，使用 add/remove 管理overlay , 无需重写以下接口
-	/*
-	 * @Override protected OverlayItem createItem(int i) { return
-	 * mGeoList.get(i); }
-	 * 
-	 * @Override public int size() { return mGeoList.size(); }
-	 */
 }
