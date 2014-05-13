@@ -1,12 +1,130 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    xmlns:tools="http://schemas.android.com/tools"  
-    android:layout_width="match_parent"  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-     >  
+    tools:context=".MainActivity" >
+
+    <TextView        
+        android:id="@+id/showRestID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"   
+        android:textSize="20sp"
+        android:text="商户    ID：" />
+    
+    <TextView
+        android:id="@+id/restID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_alignParentRight="true"   
+        android:layout_toRightOf="@id/showRestID"          
+        android:textSize="20sp"
+        android:text="12312313231" />
+    
+    <TextView        
+        android:id="@+id/showRestName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"         
+        android:layout_below="@id/showRestID" 
+        android:text="商户名称："  
+        android:textSize="20sp" />
+    
+     <TextView
+        android:id="@+id/restName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/showRestName"        
+        android:layout_below="@id/restID"  
+        android:text="海大富麻辣烫"  
+        android:textSize="20sp" />
+     
+     <TextView        
+        android:id="@+id/showRestAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"         
+        android:layout_below="@id/showRestName" 
+        android:text="商户地址："  
+        android:textSize="20sp" />
+    
+     <TextView
+        android:id="@+id/restAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/showRestAddress"        
+        android:layout_below="@id/restName"  
+        android:text="北京交通大学"  
+        android:textSize="20sp" />
+      
+     <TextView        
+        android:id="@+id/showRestPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"         
+        android:layout_below="@id/showRestAddress" 
+        android:text="平均消费："  
+        android:textSize="20sp" />
+    
+     <TextView
+        android:id="@+id/restPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/showRestAddress"        
+        android:layout_below="@id/restAddress"  
+        android:text="123元"   
+        android:textSize="20sp"/>    
+        
+             
+     <EditText
+          android:id="@+id/date" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"         
+        android:layout_alignParentLeft="true"               
+        android:layout_below="@id/restPrice"    
+        android:text="请选择订餐日期"
+        android:editable="false"
+        android:cursorVisible="false" />
+    
+     <EditText 
+         android:id="@+id/time" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"        
+        android:layout_alignParentLeft="true"               
+        android:layout_below="@id/date"          
+        android:text="请选择订餐时间"
+        android:editable="false"
+        android:cursorVisible="false" />
+    
+     <EditText 
+        android:id="@+id/phone"          
+        android:text="请输入电话号码"
+        android:phoneNumber="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"      
+        android:layout_alignParentLeft="true"               
+        android:layout_below="@id/time"    />
+     
+      <Button 
+        android:text="订菜" 
+        android:id="@+id/dishBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openOrderdish"    
+        android:layout_alignParentLeft="true"               
+        android:layout_below="@id/phone"  />
+ 	  <Button 
+        android:text="确定订座" 
+        android:id="@+id/yesOrderBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"   
+        android:layout_alignParentLeft="true"               
+        android:layout_below="@id/dishBtn"  />
+      
   
-        <TextView  
-         android:id="@+id/restID"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" /> 
-  
-</RelativeLayout>  
+
+</RelativeLayout>
