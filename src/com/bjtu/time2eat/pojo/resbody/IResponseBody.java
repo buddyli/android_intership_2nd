@@ -6,6 +6,6 @@ package com.bjtu.time2eat.pojo.resbody;
  * @author licb
  * 
  */
-public abstract class IResponseBody {
+public abstract class IResponseBody{
 
 }

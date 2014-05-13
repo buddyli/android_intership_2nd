@@ -1,9 +1,17 @@
 package com.bjtu.time2eat.activity;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
@@ -20,14 +28,20 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.BMapManager;
+import com.baidu.mapapi.map.ItemizedOverlay;
 import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationOverlay;
 import com.baidu.mapapi.map.MyLocationOverlay.LocationMode;
+import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.mapapi.map.PopupClickListener;
 import com.baidu.mapapi.map.PopupOverlay;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
+import com.bjtu.time2eat.pojo.Merchant;
+import com.bjtu.time2eat.pojo.Response;
+import com.bjtu.time2eat.pojo.resbody.RestaurantList;
+import com.bjtu.time2eat.service.RestaurantService;
 import com.bjtu.time2eat.util.BMapUtil;
 import com.example.time2eat.R;
 
@@ -36,6 +50,8 @@ import com.example.time2eat.R;
  * 
  */
 public class LocationOverlayActivity extends Activity {
+	private RestaurantService resService = new RestaurantService();
+
 	private enum E_BUTTON_TYPE {
 		LOC, COMPASS, FOLLOW
 	}
@@ -91,6 +107,7 @@ public class LocationOverlayActivity extends Activity {
 				case LOC:
 					// 手动定位请求
 					requestLocClick();
+
 					break;
 				case COMPASS:
 					myLocationOverlay.setLocationMode(LocationMode.NORMAL);
@@ -129,7 +146,7 @@ public class LocationOverlayActivity extends Activity {
 		option.setIsNeedAddress(true);// 设置是否包含地址位置信息
 		option.setNeedDeviceDirect(true);// 设置是否包含机头信息
 		mLocClient.setLocOption(option);
-		mLocClient.start();
+		// mLocClient.start();
 
 		// 定位图层初始化
 		myLocationOverlay = new locationOverlay(mMapView);
@@ -140,6 +157,8 @@ public class LocationOverlayActivity extends Activity {
 		myLocationOverlay.enableCompass();
 		// 修改定位数据后刷新图层生效
 		mMapView.refresh();
+
+		new Thread(runnable).start();
 
 	}
 
@@ -309,10 +328,117 @@ public class LocationOverlayActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
 
+	List<String[]> pois = new LinkedList<String[]>();
+
+	private void initOverlay() {
+		/**
+		 * 在想要添加Overlay的地方使用以下代码， 比如Activity的onCreate()中
+		 */
+		Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
+		// 创建IteminizedOverlay
+		OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
+		for (String[] arr : pois) {
+			double lat = Double.parseDouble(arr[0]);
+			double lon = Double.parseDouble(arr[1]);
+			GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
+			OverlayItem item = new OverlayItem(point, arr[2], arr[2]);
+
+			// 现在所有准备工作已准备好，使用以下方法管理overlay.
+			// 添加overlay, 当批量添加Overlay时使用addItem(List<OverlayItem>)效率更高
+			itemOverlay.addItem(item);
+
+			// 很二逼的写法，先这么写着
+			mMapController.setCenter(point);
+		}
+		mMapView.getOverlays().clear();
+		mMapView.getOverlays().add(itemOverlay);
+		mMapView.refresh();
+
+		// 准备要添加的Overlay
+		// double mLat1 = 39.90923;
+		// double mLon1 = 116.397428;
+		// double mLat2 = 39.9022;
+		// double mLon2 = 116.3922;
+		// double mLat3 = 39.917723;
+		// double mLon3 = 116.3722;
+		// // 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
+		// GeoPoint p1 = new GeoPoint((int) (mLat1 * 1E6), (int) (mLon1 * 1E6));
+		// GeoPoint p2 = new GeoPoint((int) (mLat2 * 1E6), (int) (mLon2 * 1E6));
+		// GeoPoint p3 = new GeoPoint((int) (mLat3 * 1E6), (int) (mLon3 * 1E6));
+		// // 准备overlay图像数据，根据实情情况修复
+		// Drawable mark = getResources().getDrawable(R.drawable.icon_marka);
+		// // 用OverlayItem准备Overlay数据
+		// OverlayItem item1 = new OverlayItem(p1, "item1", "item1");
+		// // 使用setMarker()方法设置overlay图片,如果不设置则使用构建ItemizedOverlay时的默认设置
+		// OverlayItem item2 = new OverlayItem(p2, "item2", "item2");
+		// item2.setMarker(mark);
+		// OverlayItem item3 = new OverlayItem(p3, "item3", "item3");
+		//
+		// // 创建IteminizedOverlay
+		// OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
+		// // 将IteminizedOverlay添加到MapView中
+		//
+		// mMapView.getOverlays().clear();
+		// mMapView.getOverlays().add(itemOverlay);
+		//
+		// // 现在所有准备工作已准备好，使用以下方法管理overlay.
+		// // 添加overlay, 当批量添加Overlay时使用addItem(List<OverlayItem>)效率更高
+		// itemOverlay.addItem(item1);
+		// itemOverlay.addItem(item2);
+		// itemOverlay.addItem(item3);
+		// mMapView.refresh();
+		// 删除overlay .
+		// itemOverlay.removeItem(itemOverlay.getItem(0));
+		// mMapView.refresh();
+		// 清除overlay
+		// itemOverlay.removeAll();
+		// mMapView.refresh();
+	}
+
+	@SuppressLint("HandlerLeak")
+	Handler hander = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+
+			Bundle bundle = msg.getData();
+			Object obj = bundle.getSerializable("merchants");
+			if (obj != null) {
+				RestaurantList rList = (RestaurantList) obj;
+				for (Merchant merchant : rList.getResult()) {
+					if (StringUtils.isNotBlank(merchant.getLat())
+							&& StringUtils.isNotBlank(merchant.getLon())) {
+						pois.add(new String[] { merchant.getLat(),
+								merchant.getLon(), merchant.getName() });
+					}
+
+				}
+				initOverlay();
+			}
+
+		}
+	};
+
+	Runnable runnable = new Runnable() {
+
+		@Override
+		public void run() {
+			Response<RestaurantList> list = resService
+					.searchRestaurants("", "");
+			Message msg = new Message();
+			if (list != null && list.getData() != null
+					&& list.getData().getResult() != null) {
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("merchants", list.getData());
+				msg.setData(bundle);
+			}
+			hander.sendMessage(msg);
+		}
+	};
 }
 
 /**
@@ -346,4 +472,33 @@ class MyLocationMapView extends MapView {
 		}
 		return true;
 	}
+}
+
+/*
+ * 要处理overlay点击事件时需要继承ItemizedOverlay 不处理点击事件时可直接生成ItemizedOverlay.
+ */
+class OverlayTest extends ItemizedOverlay<OverlayItem> {
+	// 用MapView构造ItemizedOverlay
+	public OverlayTest(Drawable mark, MapView mapView) {
+		super(mark, mapView);
+	}
+
+	protected boolean onTap(int index) {
+		// 在此处理item点击事件
+		System.out.println("item onTap: " + index);
+		return true;
+	}
+
+	public boolean onTap(GeoPoint pt, MapView mapView) {
+		// 在此处理MapView的点击事件，当返回 true时
+		super.onTap(pt, mapView);
+		return false;
+	}
+	// 自2.1.1 开始，使用 add/remove 管理overlay , 无需重写以下接口
+	/*
+	 * @Override protected OverlayItem createItem(int i) { return
+	 * mGeoList.get(i); }
+	 * 
+	 * @Override public int size() { return mGeoList.size(); }
+	 */
 }
