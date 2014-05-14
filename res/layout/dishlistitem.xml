@@ -1,19 +1,34 @@
-<LinearLayout  
-   xmlns:android="http://schemas.android.com/apk/res/android"  
-  android:layout_width="fill_parent"  
-  android:layout_height="fill_parent"  
-  android:orientation="vertical">  
+<RelativeLayout   
+  	 xmlns:android="http://schemas.android.com/apk/res/android"  
+     android:layout_width="fill_parent"  
+     android:layout_height="fill_parent">  
+
 	<TextView  
         android:id="@+id/dishid"  
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" 
         android:layout_width="wrap_content"  
         android:layout_height="wrap_content" />  
     <TextView  
         android:id="@+id/dishname"  
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dishid"
         android:layout_width="wrap_content"  
         android:layout_height="wrap_content" 
         android:textSize="20sp"/>  
     <TextView  
-        android:id="@+id/dishprice"  
+        android:id="@+id/dishprice" 
+        android:layout_alignParentLeft="true" 
+        android:layout_below="@+id/dishname"
         android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" />  
-</LinearLayout> 
+        android:layout_height="wrap_content" /> 
+       
+  	<CheckBox
+	     android:id="@+id/CheckBox01" 
+         android:layout_alignParentRight="true"
+         android:layout_alignParentBottom="true"
+	     android:layout_width="wrap_content" 
+	     android:layout_height="wrap_content">	    
+	</CheckBox>   
+        
+</RelativeLayout > 
