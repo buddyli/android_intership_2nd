@@ -134,7 +134,7 @@ import com.example.time2eat.R;
 						.size()];
 				int i = 0;
 				for (Merchant merchant : list.getData().getResult()) {
-					merchants[i++] = "商户ID："+merchant.getId()+"|"+
+					merchants[i++] = merchant.getId()+"|"+
 				"商户名称："+merchant.getName()+"|"+
 				"商户地址："+merchant.getAddress()+"|"+
 				"联系电话："+merchant.getTelno()+"|"+

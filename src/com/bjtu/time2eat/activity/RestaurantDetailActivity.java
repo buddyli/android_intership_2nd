@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiConfiguration.Status;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -22,16 +23,25 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bjtu.time2eat.pojo.Merchant;
+import com.bjtu.time2eat.pojo.Response;
+import com.bjtu.time2eat.pojo.resbody.RestaurantList;
+import com.bjtu.time2eat.pojo.resbody.RestaurantOrder;
+import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
+import com.example.time2eat.R.id;
+
 
 public class RestaurantDetailActivity extends Activity {
 		private EditText date;
 	    private EditText time;
 	    private EditText phone;
+	    private TextView restID;
 	    private Button yesorderButton;
 	    private final static int DATE_DIALOG = 0;
 	    private final static int TIME_DIALOG = 1;
 	    private Calendar c;
+	    private RestaurantService resService = new RestaurantService();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,7 +54,7 @@ public class RestaurantDetailActivity extends Activity {
 	     time.setFocusable(false);
 	     //phone.setFocusable(false);
          yesorderButton=(Button)findViewById(R.id.yesOrderBtn);
-         TextView restID=(TextView)findViewById(R.id.showRestID); 
+         restID=(TextView)findViewById(R.id.showRestID); 
          Intent intent=getIntent();        
          TextView restName=(TextView)findViewById(R.id.showRestName);   
          restName.setText(intent.getStringExtra("name"));
@@ -117,6 +127,20 @@ public class RestaurantDetailActivity extends Activity {
 			}	
 			else
 			{
+				try {
+					Response<RestaurantOrder> response=resService.restaurantOrder( restID.getText().toString() , phone.getText().toString(),
+							"3123,1231", date.getText().toString(),time.getText().toString());	
+					String statusString = null;
+					//if (response != null && response.getStatus() != null)
+					//{						
+						statusString =response.getStatus().getMessage();						
+					//}
+					Toast.makeText(getApplicationContext(), statusString, Toast.LENGTH_LONG).show();
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
 				
 			}
 		}
