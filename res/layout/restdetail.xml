@@ -10,17 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"   
-        android:textSize="20sp"
-        android:text="商户    ID：" />
+        android:textSize="20sp"/>
     
-    <TextView
-        android:id="@+id/restID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:layout_alignParentRight="true"   
-        android:layout_toRightOf="@id/showRestID"          
-        android:textSize="20sp"
-        android:text="12312313231" />
     
     <TextView        
         android:id="@+id/showRestName"
@@ -28,18 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"         
         android:layout_below="@id/showRestID" 
-        android:text="商户名称："  
         android:textSize="20sp" />
     
-     <TextView
-        android:id="@+id/restName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/showRestName"        
-        android:layout_below="@id/restID"  
-        android:text="海大富麻辣烫"  
-        android:textSize="20sp" />
      
      <TextView        
         android:id="@+id/showRestAddress"
@@ -47,63 +28,51 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"         
         android:layout_below="@id/showRestName" 
-        android:text="商户地址："  
         android:textSize="20sp" />
     
-     <TextView
-        android:id="@+id/restAddress"
+      <TextView        
+        android:id="@+id/showRestTelno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/showRestAddress"        
-        android:layout_below="@id/restName"  
-        android:text="北京交通大学"  
+        android:layout_alignParentLeft="true"         
+        android:layout_below="@id/showRestAddress" 
         android:textSize="20sp" />
+    
       
      <TextView        
         android:id="@+id/showRestPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"         
-        android:layout_below="@id/showRestAddress" 
-        android:text="平均消费："  
+        android:layout_below="@id/showRestTelno" 
         android:textSize="20sp" />
-    
-     <TextView
-        android:id="@+id/restPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/showRestAddress"        
-        android:layout_below="@id/restAddress"  
-        android:text="123元"   
-        android:textSize="20sp"/>    
+     
         
              
      <EditText
           android:id="@+id/date" 
+          android:inputType="date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"         
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/restPrice"    
+        android:layout_below="@id/showRestPrice"    
         android:text="请选择订餐日期"
-        android:editable="false"
         android:cursorVisible="false" />
     
      <EditText 
-         android:id="@+id/time" 
+         android:id="@+id/time"          
+          android:inputType="datetime"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"        
         android:layout_alignParentLeft="true"               
         android:layout_below="@id/date"          
         android:text="请选择订餐时间"
-        android:editable="false"
         android:cursorVisible="false" />
     
      <EditText 
-        android:id="@+id/phone"          
+        android:id="@+id/phone" 
+        android:inputType="phone"         
         android:text="请输入电话号码"
-        android:phoneNumber="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"      
         android:layout_alignParentLeft="true"               
