@@ -90,7 +90,6 @@ public class RestaurantsActivity extends ListActivity {
 
 	Runnable runnable = new Runnable() {
 
-		@Override
 		public void run() {
 			Response<RestaurantList> list = resService
 					.searchRestaurants("", "");

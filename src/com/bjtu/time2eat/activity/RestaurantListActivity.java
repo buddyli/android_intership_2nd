@@ -41,16 +41,17 @@ import com.example.time2eat.R;
 					int position, long id) {        		
 				 Intent intent = new Intent();
 				 intent.setClass(RestaurantListActivity.this, RestaurantDetailActivity.class);		
-				 intent.putExtra("id", restInfo[0]);
-				 intent.putExtra("name",restInfo[1]);
-				 intent.putExtra("address",restInfo[2]);
-				 intent.putExtra("telno",restInfo[3]);	
-				 intent.putExtra("price",restInfo[4]);		
-	    		//
-				// intent.putExtra("name", list.get(position).get("name").toString());
-				// intent.putExtra("address", list.get(position).get("address").toString());
-				// intent.putExtra("price", list.get(position).get("price").toString());
-				// intent.putExtra("telphone", list.get(position).get("telphone").toString());				 
+//				 intent.putExtra("id", restInfo[0]);
+//				 intent.putExtra("name",restInfo[1]);
+//				 intent.putExtra("address",restInfo[2]);
+//				 intent.putExtra("telno",restInfo[3]);	
+//				 intent.putExtra("price",restInfo[4]);			    
+
+				 intent.putExtra("id", list.get(position).get("id").toString());
+				 intent.putExtra("name", list.get(position).get("name").toString());
+				 intent.putExtra("address", list.get(position).get("address").toString());
+				 intent.putExtra("price", list.get(position).get("price").toString());
+				 intent.putExtra("telno", list.get(position).get("telno").toString());				 
 				 startActivity(intent);
         		//Toast.makeText(getApplicationContext(), "211212", Toast.LENGTH_SHORT).show();
 
@@ -102,7 +103,7 @@ import com.example.time2eat.R;
 				restInfo=txt[i].split("\\|");//将获得的字符串
 				Map<String, Object> map = new HashMap<String, Object>();
 				map = new HashMap<String, Object>();				
-				//map.put("id",restInfo[0]);
+				map.put("id",restInfo[0]);
 				map.put("name", restInfo[1]);
 				map.put("address", restInfo[2]);
 				map.put("telno",restInfo[3]);
@@ -122,7 +123,6 @@ import com.example.time2eat.R;
 
 	Runnable runnable = new Runnable() {
 
-		@Override
 		public void run() {
 			Response<RestaurantList> list = resService
 					.searchRestaurants("", "");
