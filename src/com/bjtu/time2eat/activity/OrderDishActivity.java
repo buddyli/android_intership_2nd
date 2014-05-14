@@ -1,12 +1,12 @@
 package com.bjtu.time2eat.activity;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -17,7 +17,11 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.bjtu.time2eat.pojo.Menu;
 import com.bjtu.time2eat.pojo.Response;
@@ -25,31 +29,81 @@ import com.bjtu.time2eat.pojo.resbody.RestaurantMenu;
 import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
 
-@SuppressLint("HandlerLeak") public class OrderDishActivity extends ListActivity {
+@SuppressLint("HandlerLeak")
+public class OrderDishActivity extends ListActivity {
 
-	private String [] dishInfo;
+	private String[] dishInfo;
 	private String restID;
+	private Button yesBtn;
+	private ListView dishlist;
+	private List<Boolean> mChecked;		
+	//mChecked = new ArrayList<Boolean>();
+	private List<Integer> listItemID = new ArrayList<Integer>();
+	private CheckBox checkBox;
 	private ProgressDialog m_pDialog;
 	private List<Map<String, Object>> list = null;
 	private RestaurantService resService = new RestaurantService();
+
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); 
-        initLoadingDialog();
-        Intent intent=getIntent();
-        restID=intent.getStringExtra("restID");
-        
-        this.getListView().setOnItemClickListener(new OnItemClickListener() {        	
-        	public void onItemClick(AdapterView<?> adapterView, View view,
-					int position, long id) {        		
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.dishlist);
+		initLoadingDialog();
+		Intent intent = getIntent();
+		restID = intent.getStringExtra("restID");
+		yesBtn= (Button) findViewById(R.id.dishBtn);
+		//checkBox = (CheckBox) findViewById(R.id.CheckBox01);
+		//dishlist=(ListView) findViewById(R.id.dishlist);
+	
+		//checkBox.
+		/*dishlist.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), arg2,Toast.LENGTH_SHORT).show();
+			}
 			
-        		//Toast.makeText(getApplicationContext(), "211212", Toast.LENGTH_SHORT).show();
+		});
+		
+		this.getListView().setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				//checkBox.setChecked(mChecked.get(position));
+				Toast.makeText(getApplicationContext(), position,Toast.LENGTH_SHORT).show();
 
 			}
+		});*/
+		new Thread(runnable).start();
+		
+		
+		
+		/*checkBox.setOnClickListener(new View.OnClickListener() {
+			int position;
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				checkBox.setChecked(mChecked.get(position));
+			}
+		});*/
+		yesBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				StringBuilder sb = new StringBuilder();				
+				for(int i=0;i<listItemID.size();i++){
+					sb.append("ItemID="+listItemID.get(i)+" . ");
+				}
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(OrderDishActivity.this);
+				builder2.setMessage(sb.toString());
+				builder2.show();
+				
+			}
 		});
-		new Thread(runnable).start();      
-    }    
-	
+		
+	}
+
 	@SuppressWarnings("deprecation")
 	private void initLoadingDialog() {
 		// 创建ProgressDialog对象
@@ -76,33 +130,36 @@ import com.example.time2eat.R;
 		// 让ProgressDialog显示
 		m_pDialog.show();
 	}
-	
+
 	@SuppressLint("HandlerLeak")
 	Handler hander = new Handler() {
-		@SuppressLint("HandlerLeak") @Override
-		public void handleMessage(Message msg){
+		@SuppressLint("HandlerLeak")
+		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			if (m_pDialog != null) {
 				m_pDialog.hide();
 			}
-			Bundle bundle = msg.getData();			
-			String[] txt = (String[]) bundle.get("dishs");			
-			list=new ArrayList<Map<String,Object>>();
-			
-			for (int i = 0; i < txt.length; i++) {	
-				dishInfo=txt[i].split("\\|");//将获得的字符串
+			Bundle bundle = msg.getData();
+			String[] txt = (String[]) bundle.get("dishs");
+			list = new ArrayList<Map<String, Object>>();
+			mChecked = new ArrayList<Boolean>();
+			for (int i = 0; i < txt.length; i++) {
+				dishInfo = txt[i].split("\\|");// 将获得的字符串
 				Map<String, Object> map = new HashMap<String, Object>();
-				map = new HashMap<String, Object>();				
-				map.put("id",dishInfo[0]);
+				map = new HashMap<String, Object>();
+				//map.put("id",dishInfo[0]);
 				map.put("name", dishInfo[1]);
 				map.put("price", dishInfo[2]);
-    		//
+	    		mChecked.add(false);
+				//
 				list.add(map);
 			}/**/
-			SimpleAdapter adapter = new SimpleAdapter(OrderDishActivity.this,list, R.layout.dishlistitem,
-					new String[] {"name","price"},
-					new int[] { R.id.dishname,R.id.dishprice});
-			setListAdapter(adapter);		
+			SimpleAdapter adapter = new SimpleAdapter(OrderDishActivity.this,
+					list, R.layout.dishlistitem, new String[] { "name",
+							"price" }, new int[] { R.id.dishname,
+							R.id.dishprice});
+			setListAdapter(adapter);
+			
 		}
 	};
 
@@ -114,13 +171,11 @@ import com.example.time2eat.R;
 			if (list != null && list.getData() != null
 					&& list.getData().getMenu() != null) {
 				Bundle bundle = new Bundle();
-				String[] dishs = new String[list.getData().getMenu()
-						.size()];
+				String[] dishs = new String[list.getData().getMenu().size()];
 				int i = 0;
-				for (Menu dish : list.getData().getMenu()){
-					dishs[i++] = dish.getId()+"|"+
-				"菜品名称："+dish.getName()+"|"+
-				"菜品价格："+dish.getPrice();
+				for (Menu dish : list.getData().getMenu()) {
+					dishs[i++] = dish.getId() + "|" + "菜品名称：" + dish.getName()
+							+ "|" + "菜品价格：" + dish.getPrice();
 				}
 				bundle.putCharSequenceArray("dishs", dishs);
 				msg.setData(bundle);
@@ -128,5 +183,5 @@ import com.example.time2eat.R;
 			hander.sendMessage(msg);
 		}
 	};
-       
 }
+
