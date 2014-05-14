@@ -55,7 +55,9 @@ public class RestaurantDetailActivity extends Activity {
 	     //phone.setFocusable(false);
          yesorderButton=(Button)findViewById(R.id.yesOrderBtn);
          restID=(TextView)findViewById(R.id.showRestID); 
-         Intent intent=getIntent();        
+        
+         Intent intent=getIntent();   
+         restID.setText(intent.getStringExtra("id"));
          TextView restName=(TextView)findViewById(R.id.showRestName);   
          restName.setText(intent.getStringExtra("name"));
          TextView restAddress=(TextView)findViewById(R.id.showRestAddress);   
@@ -129,7 +131,7 @@ public class RestaurantDetailActivity extends Activity {
 			{
 				try {
 					Response<RestaurantOrder> response=resService.restaurantOrder( restID.getText().toString() , phone.getText().toString(),
-							"3123,1231", date.getText().toString(),time.getText().toString());	
+							"精品水煮鱼", date.getText().toString(),time.getText().toString());	
 					String statusString = null;
 					//if (response != null && response.getStatus() != null)
 					//{						
@@ -185,10 +187,11 @@ public class RestaurantDetailActivity extends Activity {
 	        return dialog;		        
 	    }/* */
 
-	public void openOrderdish(View v) {
+	public void openOrderDish(View v) {
 		Intent intent =new Intent();
-		intent.setClass(this, OrderDishActivity.class);		
+		intent.setClass(RestaurantDetailActivity.this, OrderDishActivity.class);		
 		//intent.putExtra("name", restInfo.getName());
+		intent.putExtra("restID", restID.getText().toString());
 		startActivity(intent);			
 	}
 	
