@@ -78,20 +78,21 @@
         android:layout_below="@id/time" />
      
       <Button 
-        android:text="订菜" 
-        android:id="@+id/dishBtn"
+        android:text="订菜"
+        android:id="@+id/orderDishBtn" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="openOrderdish"    
+        android:onClick="openOrderDish"    
         android:layout_alignParentLeft="true"               
         android:layout_below="@id/phone"  />
+      
  	  <Button 
         android:text="确定订座" 
         android:id="@+id/yesOrderBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"   
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/dishBtn"  />
+        android:layout_below="@id/orderDishBtn"  />
       
   
 
