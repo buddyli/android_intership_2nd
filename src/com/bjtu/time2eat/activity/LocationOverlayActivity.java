@@ -46,8 +46,8 @@ import com.bjtu.time2eat.util.BMapUtil;
 import com.example.time2eat.R;
 
 /**
- * 姝emo鐢ㄦ潵灞曠ず濡備綍缁撳悎瀹氫綅SDK瀹炵幇瀹氫綅锛屽苟浣跨敤MyLocationOverlay缁樺埗瀹氫綅浣嶇疆
- * 鍚屾椂灞曠ず濡備綍浣跨敤鑷畾涔夊浘鏍囩粯鍒跺苟鐐瑰嚮鏃跺脊鍑烘场娉�
+ * 此demo用来展示如何结合定位SDK实现定位，并使用MyLocationOverlay绘制定位位置
+ * 同时展示如何使用自定义图标绘制并点击时弹出泡泿
  * 
  */
 @SuppressLint("ShowToast")
@@ -60,47 +60,47 @@ public class LocationOverlayActivity extends Activity {
 
 	private E_BUTTON_TYPE mCurBtnType;
 
-	// 瀹氫綅鐩稿叧
+	// 定位相关
 	LocationClient mLocClient;
 	LocationData locData = null;
 	public MyLocationListenner myListener = new MyLocationListenner();
 
-	// 瀹氫綅鍥惧眰
+	// 定位图层
 	locationOverlay myLocationOverlay = null;
-	// 寮瑰嚭娉℃场鍥惧眰
-	private PopupOverlay pop = null;// 寮瑰嚭娉℃场鍥惧眰锛屾祻瑙堣妭鐐规椂浣跨敤
-	private TextView popupText = null;// 娉℃场view
+	// 弹出泡泡图层
+	private PopupOverlay pop = null;// 弹出泡泡图层，浏览节点时使用
+	private TextView popupText = null;// 泡泡view
 	private View viewCache = null;
 
-	// 鍦板浘鐩稿叧锛屼娇鐢ㄧ户鎵縈apView鐨凪yLocationMapView鐩殑鏄噸鍐檛ouch浜嬩欢瀹炵幇娉℃场澶勭悊
-	// 濡傛灉涓嶅鐞唗ouch浜嬩欢锛屽垯鏃犻渶缁ф壙锛岀洿鎺ヤ娇鐢∕apView鍗冲彲
-	MyLocationMapView mMapView = null; // 鍦板浘View
+	// 地图相关，使用继承MapView的MyLocationMapView目的是重写touch事件实现泡泡处理
+	// 如果不处理touch事件，则无需继承，直接使用MapView即可
+	MyLocationMapView mMapView = null; // 地图View
 	private MapController mMapController = null;
 
-	// UI鐩稿叧
+	// UI相关
 	OnCheckedChangeListener radioButtonListener = null;
 	Button requestLocButton = null;
-	boolean isRequest = false;// 鏄惁鎵嬪姩瑙﹀彂璇锋眰瀹氫綅
-	boolean isFirstLoc = true;// 鏄惁棣栨瀹氫綅
+	boolean isRequest = false;// 是否手动触发请求定位
+	boolean isFirstLoc = true;// 是否首次定位
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		/**
-		 * 浣跨敤鍦板浘sdk鍓嶉渶鍏堝垵濮嬪寲BMapManager.
-		 * BMapManager鏄叏灞�鐨勶紝鍙负澶氫釜MapView鍏辩敤锛屽畠闇�瑕佸湴鍥炬ā鍧楀垱寤哄墠鍒涘缓锛�
-		 * 骞跺湪鍦板浘鍦板浘妯″潡閿�姣佸悗閿�姣侊紝鍙杩樻湁鍦板浘妯″潡鍦ㄤ娇鐢紝BMapManager灏变笉搴旇閿�姣�
+		 * 使用地图sdk前需先初始化BMapManager.
+		 * BMapManager是全屿的，可为多个MapView共用，它霿要地图模块创建前创建＿
+		 * 并在地图地图模块锿毁后锿毁，只要还有地图模块在使用，BMapManager就不应该锿毿
 		 */
 		DemoApplication app = (DemoApplication) this.getApplication();
 		if (app.mBMapManager == null) {
 			app.mBMapManager = new BMapManager(getApplicationContext());
 			/**
-			 * 濡傛灉BMapManager娌℃湁鍒濆鍖栧垯鍒濆鍖朆MapManager
+			 * 如果BMapManager没有初始化则初始化BMapManager
 			 */
 			app.mBMapManager.init(new DemoApplication.MyGeneralListener());
 		}
 		setContentView(R.layout.activity_locationoverlay);
-		CharSequence titleLable = "瀹氫綅鍔熻兘";
+		CharSequence titleLable = "定位功能";
 		setTitle(titleLable);
 		requestLocButton = (Button) findViewById(R.id.button1);
 		mCurBtnType = E_BUTTON_TYPE.LOC;
@@ -108,18 +108,18 @@ public class LocationOverlayActivity extends Activity {
 			public void onClick(View v) {
 				switch (mCurBtnType) {
 				case LOC:
-					// 鎵嬪姩瀹氫綅璇锋眰
+					// 手动定位请求
 					requestLocClick();
 
 					break;
 				case COMPASS:
 					myLocationOverlay.setLocationMode(LocationMode.NORMAL);
-					requestLocButton.setText("瀹氫綅");
+					requestLocButton.setText("定位");
 					mCurBtnType = E_BUTTON_TYPE.LOC;
 					break;
 				case FOLLOW:
 					myLocationOverlay.setLocationMode(LocationMode.COMPASS);
-					requestLocButton.setText("缃楃洏");
+					requestLocButton.setText("罗盘");
 					mCurBtnType = E_BUTTON_TYPE.COMPASS;
 					break;
 				}
@@ -127,38 +127,38 @@ public class LocationOverlayActivity extends Activity {
 		};
 		requestLocButton.setOnClickListener(btnClickListener);
 
-		// 鍦板浘鍒濆鍖�
+		// 地图初始匿
 		mMapView = (MyLocationMapView) findViewById(R.id.bmapView);
 		mMapController = mMapView.getController();
-		// 鍦板浘缂╂斁绾у埆锛屽彇鍊艰寖鍥�3-19
+		// 地图缩放级别，取值范囿3-19
 		mMapView.getController().setZoom(15);
 		mMapView.getController().enableClick(true);
 		mMapView.setBuiltInZoomControls(true);
-		// 鍒涘缓 寮瑰嚭娉℃场鍥惧眰
+		// 创建 弹出泡泡图层
 		createPaopao();
 
-		// 瀹氫綅鍒濆鍖�
-		// TODO 杩欓噷涓嶸3鐗堟湰鐨勫疄鐜颁笉鍚�
+		// 定位初始匿
+		// TODO 这里与V3版本的实现不吿
 		mLocClient = new LocationClient(getApplicationContext());
 		locData = new LocationData();
 		mLocClient.registerLocationListener(myListener);
 		LocationClientOption option = new LocationClientOption();
-		option.setOpenGps(true);// 鎵撳紑gps
-		option.setCoorType("bd09ll"); // 璁剧疆鍧愭爣绫诲瀷
+		option.setOpenGps(true);// 打开gps
+		option.setCoorType("bd09ll"); // 设置坐标类型
 		option.setScanSpan(5000);
-		option.setIsNeedAddress(true);// 璁剧疆鏄惁鍖呭惈鍦板潃浣嶇疆淇℃伅
-		option.setNeedDeviceDirect(true);// 璁剧疆鏄惁鍖呭惈鏈哄ご淇℃伅
+		option.setIsNeedAddress(true);// 设置是否包含地址位置信息
+		option.setNeedDeviceDirect(true);// 设置是否包含机头信息
 		mLocClient.setLocOption(option);
 		// mLocClient.start();
 
-		// 瀹氫綅鍥惧眰鍒濆鍖�
+		// 定位图层初始匿
 		myLocationOverlay = new locationOverlay(mMapView);
-		// 璁剧疆瀹氫綅鏁版嵁
+		// 设置定位数据
 		myLocationOverlay.setData(locData);
-		// 娣诲姞瀹氫綅鍥惧眰
+		// 添加定位图层
 		mMapView.getOverlays().add(myLocationOverlay);
 		myLocationOverlay.enableCompass();
-		// 淇敼瀹氫綅鏁版嵁鍚庡埛鏂板浘灞傜敓鏁�
+		// 修改定位数据后刷新图层生敿
 		mMapView.refresh();
 
 		new Thread(runnable).start();
@@ -166,35 +166,35 @@ public class LocationOverlayActivity extends Activity {
 	}
 
 	/**
-	 * 鎵嬪姩瑙﹀彂涓�娆″畾浣嶈姹�
+	 * 手动触发丿次定位请汿
 	 */
 	public void requestLocClick() {
 		isRequest = true;
 		mLocClient.requestLocation();
-		Toast.makeText(LocationOverlayActivity.this, "姝ｅ湪瀹氫綅鈥︹��",
+		Toast.makeText(LocationOverlayActivity.this, "正在定位…⿿",
 				Toast.LENGTH_SHORT).show();
 	}
 
 	/**
-	 * 淇敼浣嶇疆鍥炬爣
+	 * 修改位置图标
 	 * 
 	 * @param marker
 	 */
 	public void modifyLocationOverlayIcon(Drawable marker) {
-		// 褰撲紶鍏arker涓簄ull鏃讹紝浣跨敤榛樿鍥炬爣缁樺埗
+		// 当传入marker为null时，使用默认图标绘制
 		myLocationOverlay.setMarker(marker);
-		// 淇敼鍥惧眰锛岄渶瑕佸埛鏂癕apView鐢熸晥
+		// 修改图层，需要刷新MapView生效
 		mMapView.refresh();
 	}
 
 	/**
-	 * 鍒涘缓寮瑰嚭娉℃场鍥惧眰
+	 * 创建弹出泡泡图层
 	 */
 	public void createPaopao() {
 		viewCache = getLayoutInflater()
 				.inflate(R.layout.custom_text_view, null);
 		popupText = (TextView) viewCache.findViewById(R.id.textcache);
-		// 娉℃场鐐瑰嚮鍝嶅簲鍥炶皟
+		// 泡泡点击响应回调
 		PopupClickListener popListener = new PopupClickListener() {
 			@Override
 			public void onClickedPopup(int index) {
@@ -206,7 +206,7 @@ public class LocationOverlayActivity extends Activity {
 	}
 
 	/**
-	 * 瀹氫綅SDK鐩戝惉鍑芥暟
+	 * 定位SDK监听函数
 	 */
 	public class MyLocationListenner implements BDLocationListener {
 
@@ -217,33 +217,33 @@ public class LocationOverlayActivity extends Activity {
 
 			locData.latitude = location.getLatitude();
 			locData.longitude = location.getLongitude();
-			// 濡傛灉涓嶆樉绀哄畾浣嶇簿搴﹀湀锛屽皢accuracy璧嬪�间负0鍗冲彲
+			// 如果不显示定位精度圈，将accuracy赋忼为0即可
 			locData.accuracy = location.getRadius();
-			// 姝ゅ鍙互璁剧疆 locData鐨勬柟鍚戜俊鎭�, 濡傛灉瀹氫綅 SDK
-			// 鏈繑鍥炴柟鍚戜俊鎭紝鐢ㄦ埛鍙互鑷繁瀹炵幇缃楃洏鍔熻兘娣诲姞鏂瑰悜淇℃伅銆�
+			// 此处可以设置 locData的方向信恿, 如果定位 SDK
+			// 未返回方向信息，用户可以自己实现罗盘功能添加方向信息〿
 			locData.direction = location.getDerect();
-			// 鏇存柊瀹氫綅鏁版嵁
+			// 更新定位数据
 			myLocationOverlay.setData(locData);
-			// 鏇存柊鍥惧眰鏁版嵁鎵ц鍒锋柊鍚庣敓鏁�
+			// 更新图层数据执行刷新后生敿
 			mMapView.refresh();
-			// 鏄墜鍔ㄨЕ鍙戣姹傛垨棣栨瀹氫綅鏃讹紝绉诲姩鍒板畾浣嶇偣
+			// 是手动触发请求或首次定位时，移动到定位点
 			if (isRequest || isFirstLoc) {
-				// 绉诲姩鍦板浘鍒板畾浣嶇偣
+				// 移动地图到定位点
 				Log.d("LocationOverlay", "receive location, animate to it");
 				mMapController.animateTo(new GeoPoint(
 						(int) (locData.latitude * 1e6),
 						(int) (locData.longitude * 1e6)));
 				isRequest = false;
 				myLocationOverlay.setLocationMode(LocationMode.FOLLOWING);
-				requestLocButton.setText("璺熼殢");
+				requestLocButton.setText("跟随");
 				mCurBtnType = E_BUTTON_TYPE.FOLLOW;
 			}
-			// 棣栨瀹氫綅瀹屾垚
+			// 首次定位完成
 			isFirstLoc = false;
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
-			// 灏嗗湪涓嬩釜鐗堟湰涓幓闄oi鍔熻兘
+			// 将在下个版本中去除poi功能
 			if (poiLocation == null) {
 				return;
 			}
@@ -274,7 +274,7 @@ public class LocationOverlayActivity extends Activity {
 		}
 	}
 
-	// 缁ф壙MyLocationOverlay閲嶅啓dispatchTap瀹炵幇鐐瑰嚮澶勭悊
+	// 继承MyLocationOverlay重写dispatchTap实现点击处理
 	public class locationOverlay extends MyLocationOverlay {
 
 		public locationOverlay(MapView mapView) {
@@ -285,9 +285,9 @@ public class LocationOverlayActivity extends Activity {
 		@Override
 		protected boolean dispatchTap() {
 			// TODO Auto-generated method stub
-			// 澶勭悊鐐瑰嚮浜嬩欢,寮瑰嚭娉℃场
+			// 处理点击事件,弹出泡泡
 			popupText.setBackgroundResource(R.drawable.popup);
-			popupText.setText("鎴戠殑浣嶇疆");
+			popupText.setText("我的位置");
 			pop.showPopup(BMapUtil.getBitmapFromView(popupText), new GeoPoint(
 					(int) (locData.latitude * 1e6),
 					(int) (locData.longitude * 1e6)), 8);
@@ -310,7 +310,7 @@ public class LocationOverlayActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		// 閫�鍑烘椂閿�姣佸畾浣�
+		// 逿出时锿毁定使
 		if (mLocClient != null)
 			mLocClient.stop();
 		mMapView.destroy();
@@ -339,10 +339,10 @@ public class LocationOverlayActivity extends Activity {
 
 	private void initOverlay() {
 		/**
-		 * 鍦ㄦ兂瑕佹坊鍔燨verlay鐨勫湴鏂逛娇鐢ㄤ互涓嬩唬鐮侊紝 姣斿Activity鐨刼nCreate()涓�
+		 * 在想要添加Overlay的地方使用以下代码， 比如Activity的onCreate()丿
 		 */
 		Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
-		// 鍒涘缓IteminizedOverlay
+		// 创建IteminizedOverlay
 		OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
 		for (String[] arr : pois) {
 			double lat = Double.parseDouble(arr[0]);
@@ -350,11 +350,9 @@ public class LocationOverlayActivity extends Activity {
 			GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
 			OverlayItem item = new OverlayItem(point, arr[2], arr[2]);
 
-			// 鐜板湪鎵�鏈夊噯澶囧伐浣滃凡鍑嗗濂斤紝浣跨敤浠ヤ笅鏂规硶绠＄悊overlay.
-			// 娣诲姞overlay, 褰撴壒閲忔坊鍔燨verlay鏃朵娇鐢╝ddItem(List<OverlayItem>)鏁堢巼鏇撮珮
 			itemOverlay.addItem(item);
 
-			// 寰堜簩閫肩殑鍐欐硶锛屽厛杩欎箞鍐欑潃
+			// 很二逼的写法，先这么写着
 			mMapController.setCenter(point);
 		}
 		mMapView.getOverlays().clear();
@@ -406,17 +404,17 @@ public class LocationOverlayActivity extends Activity {
 	};
 
 	/*
-	 * 瑕佸鐞唎verlay鐐瑰嚮浜嬩欢鏃堕渶瑕佺户鎵縄temizedOverlay
-	 * 涓嶅鐞嗙偣鍑讳簨浠舵椂鍙洿鎺ョ敓鎴怚temizedOverlay.
+	 * 要处理overlay点击事件时需要继承ItemizedOverlay
+	 * 不处理点击事件时可直接生成ItemizedOverlay.
 	 */
 	class OverlayTest extends ItemizedOverlay<OverlayItem> {
-		// 鐢∕apView鏋勯�營temizedOverlay
+		// 用MapView构鿠ItemizedOverlay
 		public OverlayTest(Drawable mark, MapView mapView) {
 			super(mark, mapView);
 		}
 
 		protected boolean onTap(int index) {
-			// 鍦ㄦ澶勭悊item鐐瑰嚮浜嬩欢
+			// 在此处理item点击事件
 			OverlayItem item = getItem(index);
 			Toast.makeText(LocationOverlayActivity.this, item.getTitle(),
 					Toast.LENGTH_SHORT);
@@ -424,7 +422,7 @@ public class LocationOverlayActivity extends Activity {
 		}
 
 		public boolean onTap(GeoPoint pt, MapView mapView) {
-			// 鍦ㄦ澶勭悊MapView鐨勭偣鍑讳簨浠讹紝褰撹繑鍥� true鏃�
+			// 在此处理MapView的点击事件，当返囿 true旿
 			super.onTap(pt, mapView);
 			return false;
 		}
@@ -432,13 +430,13 @@ public class LocationOverlayActivity extends Activity {
 }
 
 /**
- * 缁ф壙MapView閲嶅啓onTouchEvent瀹炵幇娉℃场澶勭悊鎿嶄綔
+ * 继承MapView重写onTouchEvent实现泡泡处理操作
  * 
  * @author hejin
  * 
  */
 class MyLocationMapView extends MapView {
-	static PopupOverlay pop = null;// 寮瑰嚭娉℃场鍥惧眰锛岀偣鍑诲浘鏍囦娇鐢�
+	static PopupOverlay pop = null;// 弹出泡泡图层，点击图标使甿
 
 	public MyLocationMapView(Context context) {
 		super(context);
@@ -456,7 +454,7 @@ class MyLocationMapView extends MapView {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (!super.onTouchEvent(event)) {
-			// 娑堥殣娉℃场
+			// 消隐泡泡
 			if (pop != null && event.getAction() == MotionEvent.ACTION_UP)
 				pop.hidePop();
 		}
