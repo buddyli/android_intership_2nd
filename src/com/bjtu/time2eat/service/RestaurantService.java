@@ -120,7 +120,7 @@ public class RestaurantService {
 	 */
 	public Response<RestaurantOrder> restaurantOrder(String id, String mobile,
 			String foods, String date, String time) {
-		String action = "restaurant_menu";
+		String action = "restaurant_order";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", id);
 		params.put("mobile", mobile);
