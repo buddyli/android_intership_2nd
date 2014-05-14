@@ -10,10 +10,13 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.time2eat.R;
 
@@ -21,23 +24,23 @@ public class RestaurantDetailActivity extends Activity {
 		private EditText date;
 	    private EditText time;
 	    private EditText phone;
+	    private Button yesorderButton;
 	    private final static int DATE_DIALOG = 0;
 	    private final static int TIME_DIALOG = 1;
 	    private Calendar c;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.restdetail);		 
+		setContentView(R.layout.restdetail);	 
 		
-		date=(EditText)findViewById(R.id.date);
-	    time=(EditText)findViewById(R.id.time);
-		 phone=(EditText)findViewById(R.id.phone);	
-		 Intent intent=getIntent();  
+		 date=(EditText)findViewById(R.id.date);
+	     time=(EditText)findViewById(R.id.time);
+		 phone=(EditText)findViewById(R.id.phone);			 
 		 date.setFocusable(false);
-	      time.setFocusable(false);
-        
-        TextView restID=(TextView)findViewById(R.id.showRestID); 
-        //restID.setText(intent.getStringExtra("id"));         
+	     time.setFocusable(false);
+         yesorderButton=(Button)findViewById(R.id.yesOrderBtn);
+         TextView restID=(TextView)findViewById(R.id.showRestID); 
+         Intent intent=getIntent();        
          TextView restName=(TextView)findViewById(R.id.showRestName);   
          restName.setText(intent.getStringExtra("name"));
          TextView restAddress=(TextView)findViewById(R.id.showRestAddress);   
@@ -73,6 +76,18 @@ public class RestaurantDetailActivity extends Activity {
         		}
         	}
         });
+        
+       yesorderButton.setOnClickListener(new OnClickListener() {
+		
+		public void onClick(View v) {
+			if(date.getText().toString().endsWith("请选择订餐日期")||
+		       time.getText().toString().endsWith("请选择订餐时间")||
+			   phone.getText().toString().endsWith("")){
+				Toast.makeText(getApplicationContext(), "请输入必要的订餐信息", Toast.LENGTH_SHORT).show();				
+			}
+			
+		}
+       });
 	    
 }	        @Override
 	    protected Dialog onCreateDialog(int id) {	
@@ -116,6 +131,7 @@ public class RestaurantDetailActivity extends Activity {
 		//intent.putExtra("name", restInfo.getName());
 		startActivity(intent);			
 	}
+	
 
 
 }
