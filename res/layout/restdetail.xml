@@ -46,7 +46,6 @@
         android:layout_alignParentLeft="true"         
         android:layout_below="@id/showRestTelno" 
         android:textSize="20sp" />
-     
         
              
      <EditText
