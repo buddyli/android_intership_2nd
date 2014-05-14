@@ -54,7 +54,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"         
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/showRestPrice"    
+        android:layout_below="@id/showRestPrice"
         android:text="请选择订餐日期"
         android:cursorVisible="false" />
     
@@ -64,7 +64,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"        
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/date"          
+        android:layout_below="@id/date"    
         android:text="请选择订餐时间"
         android:cursorVisible="false" />
     
