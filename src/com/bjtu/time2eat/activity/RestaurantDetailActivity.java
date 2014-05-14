@@ -5,12 +5,16 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,6 +42,7 @@ public class RestaurantDetailActivity extends Activity {
 		 phone=(EditText)findViewById(R.id.phone);			 
 		 date.setFocusable(false);
 	     time.setFocusable(false);
+	     //phone.setFocusable(false);
          yesorderButton=(Button)findViewById(R.id.yesOrderBtn);
          TextView restID=(TextView)findViewById(R.id.showRestID); 
          Intent intent=getIntent();        
@@ -49,56 +54,88 @@ public class RestaurantDetailActivity extends Activity {
          restTelno.setText(intent.getStringExtra("telno"));
          TextView restPrice=(TextView)findViewById(R.id.showRestPrice);   
          restPrice.setText(intent.getStringExtra("price"));
-       
+         
+        
+        /* date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				// TODO Auto-generated method stub
+				showDialog(DATE_DIALOG);  
+				 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                 imm.hideSoftInputFromWindow(date.getWindowToken(),0);
+				
+			}
+		});*/
         date.setOnClickListener(new View.OnClickListener(){
             @SuppressWarnings("deprecation")
 			public void onClick(View v) {	
-            	
-                showDialog(DATE_DIALOG);
+            	 //date.setInputType(InputType.TYPE_NULL);            	
+            	showDialog(DATE_DIALOG);  
             }
-        });
+        });/**/
+            
         time.setOnClickListener(new View.OnClickListener(){
             @SuppressWarnings("deprecation")
 			public void onClick(View v) {
                 showDialog(TIME_DIALOG);
             }
-        });	    
-    
-        phone.setOnFocusChangeListener(new android.view.View.OnFocusChangeListener() {  
-        	public void onFocusChange(View v, boolean hasFocus) {  
-        		if(hasFocus) {
-            	// 此处为得到焦点时的处理内容
-            	if(phone.getText().toString().equals("请输入电话号码"))
+        });	 
+        phone.setOnClickListener(new View.OnClickListener(){
+            @SuppressWarnings("deprecation")
+			public void onClick(View v) {
             	phone.setText("");
-        		} else {
-        			// 此处为失去焦点时的处理内容
-        		}
-        	}
-        });
+            }
+        });	
+    
+       /* phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				// TODO Auto-generated method stub
+				if(hasFocus)
+				{
+					phone.setText("");
+				}
+				else 
+				{
+					if(phone.getText().toString().endsWith("请输入手机号码"))
+					{phone.setText("");}
+				}
+				
+			}
+		});*/
         
        yesorderButton.setOnClickListener(new OnClickListener() {
 		
 		public void onClick(View v) {
 			if(date.getText().toString().endsWith("请选择订餐日期")||
 		       time.getText().toString().endsWith("请选择订餐时间")||
-			   phone.getText().toString().endsWith("")){
-				Toast.makeText(getApplicationContext(), "请输入必要的订餐信息", Toast.LENGTH_SHORT).show();				
+			   phone.getText().toString().equals("")||
+			   phone.getText().toString().equals("请输入手机号码")){
+			   Toast.makeText(getApplicationContext(), "请输入必要的订餐信息", Toast.LENGTH_SHORT).show();				
+			}	
+			else
+			{
+				
 			}
-			
 		}
        });
 	    
-}	        @Override
-	    protected Dialog onCreateDialog(int id) {	
-        	Dialog dialog = null;	        	
+}	    
+	
+	
+	   @Override
+	  protected Dialog onCreateDialog(int id) {	
+        	Dialog dialog = null;       	 
 	        switch (id) {
 	        case DATE_DIALOG:
-	            c = Calendar.getInstance();
+	            c = Calendar.getInstance();	           
 	            dialog = new DatePickerDialog(
 	                this,
 	                new DatePickerDialog.OnDateSetListener() {
 	                    public void onDateSet(DatePicker dp, int year,int month, int dayOfMonth) {
-	                        date.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
+	                        date.setText(year + "-" + (month+1) + "-" + dayOfMonth);
 	                    }
 	                }, 
 	                c.get(Calendar.YEAR), // 传入年份
@@ -112,7 +149,7 @@ public class RestaurantDetailActivity extends Activity {
 	                this, 
 	                new TimePickerDialog.OnTimeSetListener(){
 	                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-	                        time.setText("您选择了："+hourOfDay+"时"+minute+"分");
+	                        time.setText(hourOfDay+":"+minute);
 	                    }
 	                },
 	                c.get(Calendar.HOUR_OF_DAY),
@@ -122,7 +159,7 @@ public class RestaurantDetailActivity extends Activity {
 	            break;
 	        }
 	        return dialog;		        
-	    }
+	    }/* */
 
 	public void openOrderdish(View v) {
 		Intent intent =new Intent();
