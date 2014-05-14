@@ -25,28 +25,6 @@ public class HttpUtils {
 	private static final String host = "http://60.247.57.229:12088/";
 	static {
 		httpclient = new DefaultHttpClient();
-		// HttpParams params = new BasicHttpParams();
-		// PoolingClientConnectionManager cm = new
-		// PoolingClientConnectionManager();
-		// cm.setMaxTotal(4000);// 设置默认的最大连接数为4000
-		// cm.setDefaultMaxPerRoute(400);// 设置每个路由最大连接数为400
-		// params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-		// 30000);// 连接超时时间30秒
-		// params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 60000);//
-		// 读取数据超时时间60秒
-		// httpclient = new DefaultHttpClient(cm, params);
-		// httpclient.setHttpRequestRetryHandler(new HttpRequestRetryHandler() {
-		// public boolean retryRequest(IOException exception, int
-		// executionCount, HttpContext context) {
-		// if (executionCount > 3) {
-		// return false;
-		// }
-		// if (exception instanceof org.apache.http.NoHttpResponseException) {
-		// return true;
-		// }
-		// return false;
-		// }
-		// });
 	}
 
 	public static String fetchResponseByGet(String action,

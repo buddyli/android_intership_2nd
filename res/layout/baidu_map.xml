@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/map_example" />
+        android:text="@string/my_location" />
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/bmapsView"

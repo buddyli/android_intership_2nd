@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.bjtu.time2eat.pojo.Merchant;
 import com.bjtu.time2eat.pojo.Response;

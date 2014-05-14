@@ -5,17 +5,12 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiConfiguration.Status;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,13 +18,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.bjtu.time2eat.pojo.Merchant;
 import com.bjtu.time2eat.pojo.Response;
-import com.bjtu.time2eat.pojo.resbody.RestaurantList;
 import com.bjtu.time2eat.pojo.resbody.RestaurantOrder;
 import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
-import com.example.time2eat.R.id;
 
 
 public class RestaurantDetailActivity extends Activity {

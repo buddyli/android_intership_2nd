@@ -76,7 +76,7 @@
         <!-- 申请key参考链接:http://bbs.lbsyun.baidu.com/viewthread.php?tid=4389&extra=page%3D1 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="KoOvNm38GQv0vv9DUrvtmsv1" >
+            android:value="xgQIOtUfqGy8wUu4aEOW29In" >
         </meta-data>
 
         <service
@@ -96,7 +96,7 @@
         </activity>
         <activity
             android:name="com.bjtu.time2eat.activity.MapActivity"
-            android:label="@string/map_example" >
+            android:label="@string/my_location" >
         </activity>
         <activity
             android:name="com.bjtu.time2eat.activity.LocationOverlayActivity"
