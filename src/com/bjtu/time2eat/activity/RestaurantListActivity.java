@@ -28,8 +28,8 @@ import com.example.time2eat.R;
 
 @SuppressLint("HandlerLeak") public class RestaurantListActivity extends ListActivity {
 
-	String [] restInfo;
-	ProgressDialog m_pDialog;
+	private String [] restInfo;
+	private ProgressDialog m_pDialog;
 	private List<Map<String, Object>> list = null;
 	private RestaurantService resService = new RestaurantService();
 	@Override
@@ -44,6 +44,9 @@ import com.example.time2eat.R;
 				 intent.putExtra("id", restInfo[0]);
 				 intent.putExtra("name",restInfo[1]);
 				 intent.putExtra("address",restInfo[2]);
+				 intent.putExtra("telno",restInfo[3]);	
+				 intent.putExtra("price",restInfo[4]);		
+	    		//
 				// intent.putExtra("name", list.get(position).get("name").toString());
 				// intent.putExtra("address", list.get(position).get("address").toString());
 				// intent.putExtra("price", list.get(position).get("price").toString());
@@ -95,16 +98,15 @@ import com.example.time2eat.R;
 			String[] txt = (String[]) bundle.get("merchants");			
 			list=new ArrayList<Map<String,Object>>();
 			
-			//Toast.makeText(getApplicationContext(),txt[0], Toast.LENGTH_SHORT).show();
 			for (int i = 0; i < txt.length; i++) {	
 				restInfo=txt[i].split("\\|");//将获得的字符串
-				//Toast.makeText(getApplicationContext(),"qqqqq", Toast.LENGTH_SHORT).show();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map = new HashMap<String, Object>();				
-				map.put("id",restInfo[0]);
+				//map.put("id",restInfo[0]);
 				map.put("name", restInfo[1]);
 				map.put("address", restInfo[2]);
-				//map.put("price", restInfo[2]);
+				map.put("telno",restInfo[3]);
+				map.put("price", restInfo[4]);
     		//
 				list.add(map);
 			}/**/
@@ -112,8 +114,8 @@ import com.example.time2eat.R;
 				//restInfo=txt[i].split("*");			
 			
 			SimpleAdapter adapter = new SimpleAdapter(RestaurantListActivity.this,list, R.layout.restlistitem,
-					new String[] {"id","name","address"},
-					new int[] { R.id.restaurantid, R.id.restaurantname,R.id.restaurantaddress});
+					new String[] {"name","address","telno","price"},
+					new int[] { R.id.restaurantname,R.id.restaurantaddress,R.id.restauranttelno,R.id.restaurantprice});
 			setListAdapter(adapter);		
 		}
 	};
@@ -132,8 +134,11 @@ import com.example.time2eat.R;
 						.size()];
 				int i = 0;
 				for (Merchant merchant : list.getData().getResult()) {
-					merchants[i++] = merchant.getId()+"|"+merchant.getName()+"|"+merchant.getAddress()+"|"+merchant.getPrice()+"|"+merchant.getTelno();
-					//merchants[i++] = merchant.getAddress();
+					merchants[i++] = "商户ID："+merchant.getId()+"|"+
+				"商户名称："+merchant.getName()+"|"+
+				"商户地址："+merchant.getAddress()+"|"+
+				"联系电话："+merchant.getTelno()+"|"+
+				"人均消费："+merchant.getPrice();
 				}
 				bundle.putCharSequenceArray("merchants", merchants);
 				msg.setData(bundle);

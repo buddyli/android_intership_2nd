@@ -36,12 +36,16 @@ public class RestaurantDetailActivity extends Activity {
 		 date.setFocusable(false);
 	      time.setFocusable(false);
         
-        TextView restID=(TextView)findViewById(R.id.restID); 
-        restID.setText(intent.getStringExtra("id"));         
-         TextView restName=(TextView)findViewById(R.id.restName);   
+        TextView restID=(TextView)findViewById(R.id.showRestID); 
+        //restID.setText(intent.getStringExtra("id"));         
+         TextView restName=(TextView)findViewById(R.id.showRestName);   
          restName.setText(intent.getStringExtra("name"));
-         TextView restAddress=(TextView)findViewById(R.id.restAddress);   
+         TextView restAddress=(TextView)findViewById(R.id.showRestAddress);   
          restAddress.setText(intent.getStringExtra("address"));
+         TextView restTelno=(TextView)findViewById(R.id.showRestTelno);   
+         restTelno.setText(intent.getStringExtra("telno"));
+         TextView restPrice=(TextView)findViewById(R.id.showRestPrice);   
+         restPrice.setText(intent.getStringExtra("price"));
        
         date.setOnClickListener(new View.OnClickListener(){
             @SuppressWarnings("deprecation")
