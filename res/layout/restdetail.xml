@@ -71,11 +71,11 @@
      <EditText 
         android:id="@+id/phone" 
         android:inputType="phone"         
-        android:text="请输入电话号码"
+        android:text="请输入手机号码"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"      
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/time"    />
+        android:layout_below="@id/time" />
      
       <Button 
         android:text="订菜" 
