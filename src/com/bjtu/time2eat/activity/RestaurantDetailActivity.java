@@ -32,6 +32,7 @@ public class RestaurantDetailActivity extends Activity {
 	private final static int TIME_DIALOG = 1;
 	private Calendar c;
 	private RestaurantService resService = new RestaurantService();
+	private static final int OTHER = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +57,9 @@ public class RestaurantDetailActivity extends Activity {
 		TextView restTelno = (TextView) findViewById(R.id.showRestTelno);
 		restTelno.setText(intent.getStringExtra("telno"));
 		TextView restPrice = (TextView) findViewById(R.id.showRestPrice);
-		restPrice.setText(intent.getStringExtra("price"+"RMB"));
+		restPrice.setText(intent.getStringExtra("price" + "RMB"));
+		// intent.getExtras()
 
-		/*
-		 * date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-		 * 
-		 * @Override public void onFocusChange(View v, boolean hasFocus) { //
-		 * TODO Auto-generated method stub showDialog(DATE_DIALOG);
-		 * InputMethodManager imm =
-		 * (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		 * imm.hideSoftInputFromWindow(date.getWindowToken(),0);
-		 * 
-		 * } });
-		 */
 		date.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
@@ -108,8 +99,35 @@ public class RestaurantDetailActivity extends Activity {
 						|| time.getText().toString().endsWith("请选择订餐时间")
 						|| phone.getText().toString().equals("")
 						|| phone.getText().toString().equals("请输入手机号码")) {
+
 					Toast.makeText(getApplicationContext(), "请输入必要的订餐信息",
 							Toast.LENGTH_SHORT).show();
+
+					/*
+					 * long calID = 3; long startMillis = 0; long endMillis = 0;
+					 * Calendar beginTime= Calendar.getInstance();
+					 * beginTime.set(2014, 4, 15, 18, 49);
+					 * startMillis=beginTime.getTimeInMillis(); Calendar endTime
+					 * = Calendar.getInstance(); endTime.set(2014, 4, 15, 18,
+					 * 59); endMillis=endTime.getTimeInMillis();
+					 * 
+					 * ContentResolver cr = getContentResolver(); ContentValues
+					 * values = new ContentValues(); values.put(Events.DTSTART,
+					 * startMillis); values.put(Events.DTEND, endMillis);
+					 * values.put(Events.TITLE, "hello");
+					 * values.put(Events.DESCRIPTION, "calendar");
+					 * values.put(Events.CALENDAR_ID, calID);
+					 * values.put(Events.EVENT_TIMEZONE, "China/Bei_Jing");
+					 * //values.put(Events., "hello"); Uri uri =
+					 * cr.insert(Events.CONTENT_URI, values); long eventID =
+					 * Long.parseLong(uri.getLastPathSegment()); ContentResolver
+					 * cd = getContentResolver(); ContentValues value = new
+					 * ContentValues(); value.put(Reminders.MINUTES, 5);
+					 * value.put(Reminders.EVENT_ID, eventID);
+					 * value.put(Reminders.METHOD, Reminders.METHOD_ALERT); Uri
+					 * uri1 = cd.insert(Reminders.CONTENT_URI, values);
+					 */
+
 				} else {
 					try {
 						Response<RestaurantOrder> response = resService
@@ -133,6 +151,32 @@ public class RestaurantDetailActivity extends Activity {
 			}
 		});
 
+	}
+
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		// 请求码
+		switch (requestCode) {
+		// other 这个请求 的处理
+		case OTHER:
+			// 根据请求返回值得结果码 再进行匹配
+			switch (resultCode) {
+			case RESULT_OK:
+				Toast.makeText(this, "返回的数据" + data.getStringExtra("totalID"),
+						Toast.LENGTH_LONG).show();
+				break;
+
+			default:
+				break;
+			}
+
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -173,7 +217,21 @@ public class RestaurantDetailActivity extends Activity {
 		intent.setClass(RestaurantDetailActivity.this, OrderDishActivity.class);
 		// intent.putExtra("name", restInfo.getName());
 		intent.putExtra("restID", restID.getText().toString());
-		startActivity(intent);
+		//startActivity(intent);
+		startActivityForResult(intent, OTHER);
+		
 	}
+	
+	/*public void goOtherActivity(View v) {
+
+		// 返回数据的获取的操作
+		Intent intent = new Intent(RestaurantDetailActivity.this,
+				OrderDishActivity.class);
+		intent.putExtra("totalID", "shasha");
+		intent.putExtra("totalPrice", "xxxx");
+		// 新打开的activity返回的数据
+		startActivityForResult(intent, OTHER);
+	}
+*/
 
 }
