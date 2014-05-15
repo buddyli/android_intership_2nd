@@ -188,7 +188,7 @@ public class MyLocationActivity extends Activity {
 	/**
 	 * 定位SDK监听函数
 	 */
-	public class MyLocationListenner implements BDLocationListener {
+	class MyLocationListenner implements BDLocationListener {
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
@@ -200,7 +200,7 @@ public class MyLocationActivity extends Activity {
 			// 如果不显示定位精度圈，将accuracy赋忼为0即可
 			locData.accuracy = location.getRadius();
 			// 此处可以设置 locData的方向信恿, 如果定位 SDK
-			// 未返回方向信息，用户可以自己实现罗盘功能添加方向信息〿
+			// 未返回方向信息，用户可以自己实现罗盘功能添加方向信息
 			locData.direction = location.getDerect();
 			// 更新定位数据
 			myLocationOverlay.setData(locData);

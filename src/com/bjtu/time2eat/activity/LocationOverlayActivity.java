@@ -132,6 +132,7 @@ public class LocationOverlayActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		overlayItems.clear();
 		mMapView.destroy();
 		super.onDestroy();
 	}
@@ -152,7 +153,7 @@ public class LocationOverlayActivity extends Activity {
 	private void initOverlay() {
 		// 清除图层上以前的元素
 		mMapView.getOverlays().clear();
-		overlayItems.clear();
+		// overlayItems.clear();
 
 		/**
 		 * 向地图添加自定义View.
@@ -175,7 +176,10 @@ public class LocationOverlayActivity extends Activity {
 		for (String[] arr : pois) {
 			double lat = Double.parseDouble(arr[0]);
 			double lon = Double.parseDouble(arr[1]);
-			GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
+
+			double[] xy = BMapUtil.bd_encrypt(lat, lon);
+			GeoPoint point = new GeoPoint((int) (xy[1] * 1E6),
+					(int) (xy[0] * 1E6));
 			OverlayItem item = new OverlayItem(point, arr[2], arr[2]);
 
 			itemOverlay.addItem(item);
