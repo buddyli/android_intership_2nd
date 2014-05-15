@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -46,7 +45,6 @@ public class OrderDishActivity extends ListActivity {
 	private List<String> totalPrice = new ArrayList<String>();
 
 	private List<Integer> selectedID = new ArrayList<Integer>();
-	List<Dish> listDish;
 	private ProgressDialog m_pDialog;
 	private List<Map<String, Object>> list = null;
 	private RestaurantService resService = new RestaurantService();
