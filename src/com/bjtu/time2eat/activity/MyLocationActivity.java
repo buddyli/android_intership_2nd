@@ -75,13 +75,13 @@ public class MyLocationActivity extends Activity {
 		 * 使用地图sdk前需先初始化BMapManager. BMapManager是全屿的，可为多个MapView共用，它霿要地图模块创建前创建＿
 		 * 并在地图地图模块锿毁后锿毁，只要还有地图模块在使用，BMapManager就不应该锿毿
 		 */
-		DemoApplication app = (DemoApplication) this.getApplication();
+		Time2EatApplication app = (Time2EatApplication) this.getApplication();
 		if (app.mBMapManager == null) {
 			app.mBMapManager = new BMapManager(getApplicationContext());
 			/**
 			 * 如果BMapManager没有初始化则初始化BMapManager
 			 */
-			app.mBMapManager.init(new DemoApplication.MyGeneralListener());
+			app.mBMapManager.init(new Time2EatApplication.MyGeneralListener());
 		}
 		setContentView(R.layout.activity_locationoverlay);
 		CharSequence titleLable = "定位功能";

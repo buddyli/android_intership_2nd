@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.ItemizedOverlay;
+import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.OverlayItem;
@@ -59,6 +60,10 @@ public class LocationOverlayActivity extends Activity {
 	private View popupRight = null;
 	protected int currentItemIndex = 0;
 
+	// 当前位置的经纬度坐标
+	private double currentLat;
+	private double currentLon;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,13 +71,13 @@ public class LocationOverlayActivity extends Activity {
 		 * 使用地图sdk前需先初始化BMapManager. BMapManager是全局的，可为多个MapView共用，它霿要地图模块创建前创建＿
 		 * 并在地图地图模块锿毁后锿毁，只要还有地图模块在使用，BMapManager就不应该锿毿
 		 */
-		DemoApplication app = (DemoApplication) this.getApplication();
+		Time2EatApplication app = (Time2EatApplication) this.getApplication();
 		if (app.mBMapManager == null) {
 			app.mBMapManager = new BMapManager(getApplicationContext());
 			/**
 			 * 如果BMapManager没有初始化则初始化BMapManager
 			 */
-			app.mBMapManager.init(new DemoApplication.MyGeneralListener());
+			app.mBMapManager.init(new Time2EatApplication.MyGeneralListener());
 		}
 		setContentView(R.layout.activity_locationoverlay);
 
@@ -115,6 +120,11 @@ public class LocationOverlayActivity extends Activity {
 		};
 		pop = new PopupOverlay(mMapView, popListener);
 		new Thread(runnable).start();
+
+		// 从Application中获取当前位置的坐标。
+		LocationData ld = app.getLocData();
+		currentLat = ld.latitude;
+		currentLon = ld.longitude;
 
 	}
 
@@ -169,10 +179,24 @@ public class LocationOverlayActivity extends Activity {
 		 * 在想要添加Overlay的地方使用以下代码， 比如Activity的onCreate()丿
 		 */
 		Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
+		Drawable navMark = getResources()
+				.getDrawable(R.drawable.bg_map_location);
 		// 创建IteminizedOverlay
 		MyOverlay itemOverlay = new MyOverlay(mark, mMapView);
 
+		// 设置当前定位位置为中心点
 		GeoPoint center = null;
+		OverlayItem centerItem = null;
+		if (currentLat != 0 && currentLon != 0) {
+			center = new GeoPoint((int) (currentLat * 1E6),
+					(int) (currentLon * 1E6));
+			centerItem = new OverlayItem(center, String.valueOf(currentLat),
+					String.valueOf(currentLon));
+			centerItem.setMarker(navMark);
+			overlayItems.add(0, centerItem);
+			itemOverlay.addItem(centerItem);
+		}
+
 		for (String[] arr : pois) {
 			double lat = Double.parseDouble(arr[0]);
 			double lon = Double.parseDouble(arr[1]);
@@ -183,12 +207,13 @@ public class LocationOverlayActivity extends Activity {
 			OverlayItem item = new OverlayItem(point, arr[2], arr[2]);
 
 			itemOverlay.addItem(item);
-			center = point;
 		}
 		// 保存所有item，以便overlay在reset后重新添加
 		overlayItems.addAll(itemOverlay.getAllItem());
 		// 设置地图的中心点，这里因该是定位获取到得到位置。。。
-		mMapController.animateTo(center);
+		if (center != null)
+			mMapController.animateTo(center);
+
 		// 将位置加入到地图中
 		mMapView.getOverlays().add(itemOverlay);
 		// 刷新地图，是刚才的位置生效
@@ -254,20 +279,30 @@ public class LocationOverlayActivity extends Activity {
 
 		@Override
 		public boolean onTap(int index) {
-			OverlayItem item = getItem(index);
-			// 保存一下这个商户的位置，在跳转到详情和查询路线时可以用到。
-			currentItemIndex = index;
+			if (index == 0) {
+				// 第一个坐标是当前的定位位置，因此点击不跳转到商户详情
+				popupText.setBackgroundResource(R.drawable.popup);
+				popupText.setText("我的位置");
+				pop.showPopup(BMapUtil.getBitmapFromView(popupText),
+						new GeoPoint((int) (currentLat * 1e6),
+								(int) (currentLon * 1e6)), 8);
+			} else {
+				OverlayItem item = getItem(index);
+				// 保存一下这个商户的位置，在跳转到详情和查询路线时可以用到。
+				currentItemIndex = index;
 
-			try {
-				popupText.setText(getItem(index).getTitle());
-				Bitmap[] bitMaps = { BMapUtil.getBitmapFromView(popupLeft),
-						BMapUtil.getBitmapFromView(popupInfo),
-						BMapUtil.getBitmapFromView(popupRight) };
+				try {
+					popupText.setText(getItem(index).getTitle());
+					Bitmap[] bitMaps = { BMapUtil.getBitmapFromView(popupLeft),
+							BMapUtil.getBitmapFromView(popupInfo),
+							BMapUtil.getBitmapFromView(popupRight) };
 
-				pop.showPopup(bitMaps, item.getPoint(), 32);
-			} catch (Exception e) {
-				e.printStackTrace();
+					pop.showPopup(bitMaps, item.getPoint(), 32);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+
 			return true;
 		}
 

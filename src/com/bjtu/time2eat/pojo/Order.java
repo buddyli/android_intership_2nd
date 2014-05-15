@@ -15,6 +15,8 @@ public class Order implements Serializable {
 	private String name;
 	private String datetime;
 	private List<String> ordered;
+	private int num;
+	private String restaurant_id;
 
 	public String getId() {
 		return id;
@@ -62,6 +64,22 @@ public class Order implements Serializable {
 
 	public void setOrdered(List<String> ordered) {
 		this.ordered = ordered;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public String getRestaurant_id() {
+		return restaurant_id;
+	}
+
+	public void setRestaurant_id(String restaurant_id) {
+		this.restaurant_id = restaurant_id;
 	}
 
 }
