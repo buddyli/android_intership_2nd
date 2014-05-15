@@ -14,17 +14,34 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.ItemizedOverlay;
 import com.baidu.mapapi.map.LocationData;
+import com.baidu.mapapi.map.MKEvent;
+import com.baidu.mapapi.map.MKMapTouchListener;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.mapapi.map.PopupClickListener;
 import com.baidu.mapapi.map.PopupOverlay;
+import com.baidu.mapapi.map.RouteOverlay;
+import com.baidu.mapapi.search.MKAddrInfo;
+import com.baidu.mapapi.search.MKBusLineResult;
+import com.baidu.mapapi.search.MKDrivingRouteResult;
+import com.baidu.mapapi.search.MKPlanNode;
+import com.baidu.mapapi.search.MKPoiResult;
+import com.baidu.mapapi.search.MKRoute;
+import com.baidu.mapapi.search.MKSearch;
+import com.baidu.mapapi.search.MKSearchListener;
+import com.baidu.mapapi.search.MKShareUrlResult;
+import com.baidu.mapapi.search.MKSuggestionResult;
+import com.baidu.mapapi.search.MKTransitRouteResult;
+import com.baidu.mapapi.search.MKWalkingRouteResult;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.bjtu.time2eat.pojo.Merchant;
 import com.bjtu.time2eat.pojo.Response;
@@ -42,6 +59,13 @@ import com.example.time2eat.R;
 public class LocationOverlayActivity extends Activity {
 	private RestaurantService resService = new RestaurantService();
 
+	private enum E_BUTTON_TYPE {
+		LOC, COMPASS, FOLLOW
+	}
+
+	Button requestLocButton = null;
+	private E_BUTTON_TYPE mCurBtnType;
+
 	// 地图相关，使用继承MapView的MyLocationMapView目的是重写touch事件实现泡泡处理
 	// 如果不处理touch事件，则无需继承，直接使用MapView即可
 	MyLocationMapView mMapView = null; // 地图View
@@ -52,7 +76,7 @@ public class LocationOverlayActivity extends Activity {
 	List<Merchant> merchants = new LinkedList<Merchant>();
 	// 弹出泡泡图层
 	private PopupOverlay pop = null;
-	/** 一堆需要用到的变量 */
+	/** 餐馆地图打点需要用到的变量 */
 	private TextView popupText = null;
 	private View viewCache = null;
 	private View popupInfo = null;
@@ -63,6 +87,15 @@ public class LocationOverlayActivity extends Activity {
 	// 当前位置的经纬度坐标
 	private double currentLat;
 	private double currentLon;
+
+	/** 线路规划相关参数 */
+	// 浏览路线节点相关
+	int nodeIndex = -2;// 节点索引,供浏览节点时使用
+	MKRoute route = null;// 保存驾车/步行路线数据的变量，供浏览节点时使用
+	RouteOverlay routeOverlay = null;
+	boolean useDefaultIcon = false;
+	// 搜索相关
+	MKSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -91,12 +124,136 @@ public class LocationOverlayActivity extends Activity {
 		// 显示内置缩放控件
 		mMapView.setBuiltInZoomControls(true);
 
+		// 从Application中获取当前位置的坐标。
+		LocationData ld = app.getLocData();
+		currentLat = ld.latitude;
+		currentLon = ld.longitude;
+
+		// 重置浏览节点的路线数据
+		route = null;
+		routeOverlay = null;
+
+		requestLocButton = (Button) findViewById(R.id.button1);
+		mCurBtnType = E_BUTTON_TYPE.LOC;
+		OnClickListener btnClickListener = new OnClickListener() {
+			public void onClick(View v) {
+				switch (mCurBtnType) {
+				case LOC:
+					// 手动定位请求
+					// requestLocClick();
+					initOverlay();
+					break;
+				case COMPASS:
+					break;
+				case FOLLOW:
+					break;
+				}
+			}
+		};
+		requestLocButton.setOnClickListener(btnClickListener);
+
+		// 地图点击事件处理
+		mMapView.regMapTouchListner(new MKMapTouchListener() {
+
+			@Override
+			public void onMapClick(GeoPoint point) {
+				// 在此处理地图点击事件
+				// 消隐pop
+				if (pop != null) {
+					pop.hidePop();
+				}
+			}
+
+			@Override
+			public void onMapDoubleClick(GeoPoint point) {
+
+			}
+
+			@Override
+			public void onMapLongClick(GeoPoint point) {
+
+			}
+
+		});
+		// 初始化搜索模块，注册事件监听
+		mSearch = new MKSearch();
+		mSearch.init(app.mBMapManager, new MKSearchListener() {
+
+			public void onGetDrivingRouteResult(MKDrivingRouteResult res,
+					int error) {
+			}
+
+			public void onGetTransitRouteResult(MKTransitRouteResult res,
+					int error) {
+			}
+
+			public void onGetWalkingRouteResult(MKWalkingRouteResult res,
+					int error) {
+				// 起点或终点有歧义，需要选择具体的城市列表或地址列表
+				if (error == MKEvent.ERROR_ROUTE_ADDR) {
+					return;
+				}
+				if (error != 0 || res == null) {
+					Toast.makeText(LocationOverlayActivity.this, "抱歉，未找到结果",
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+				routeOverlay = new RouteOverlay(LocationOverlayActivity.this,
+						mMapView);
+				// 此处仅展示一个方案作为示例
+				routeOverlay.setData(res.getPlan(0).getRoute(0));
+				// 清除其他图层
+				mMapView.getOverlays().clear();
+				// 添加路线图层
+				mMapView.getOverlays().add(routeOverlay);
+				// 执行刷新使生效
+				mMapView.refresh();
+				// 使用zoomToSpan()绽放地图，使路线能完全显示在地图上
+				mMapView.getController().zoomToSpan(
+						routeOverlay.getLatSpanE6(),
+						routeOverlay.getLonSpanE6());
+				// 移动地图到起点
+				mMapView.getController().animateTo(res.getStart().pt);
+				// 将路线数据保存给全局变量
+				route = res.getPlan(0).getRoute(0);
+				// 重置路线节点索引，节点浏览时使用
+				nodeIndex = -1;
+			}
+
+			public void onGetAddrResult(MKAddrInfo res, int error) {
+			}
+
+			public void onGetPoiResult(MKPoiResult res, int arg1, int arg2) {
+			}
+
+			public void onGetBusDetailResult(MKBusLineResult result, int iError) {
+			}
+
+			@Override
+			public void onGetSuggestionResult(MKSuggestionResult res, int arg1) {
+			}
+
+			@Override
+			public void onGetPoiDetailSearchResult(int type, int iError) {
+			}
+
+			@Override
+			public void onGetShareUrlResult(MKShareUrlResult result, int type,
+					int error) {
+
+			}
+		});
 		/**
 		 * 创建一个popupoverlay，点击图标的响应在这里处理。
 		 */
 		PopupClickListener popListener = new PopupClickListener() {
 			@Override
 			public void onClickedPopup(int index) {
+				if (pop != null) {
+					pop.hidePop();
+				}
+
 				if (index == 0) {
 					Intent intent = new Intent(LocationOverlayActivity.this,
 							RestaurantDetailActivity.class);
@@ -120,17 +277,28 @@ public class LocationOverlayActivity extends Activity {
 					// 点击商户名称，不做响应
 				} else if (index == 2) {
 					// 点击路线图标，表示当前位置到餐馆的线路
+					// 因为地图打点时还有当前的定位的点，这个点是第一个。但是merchants列表中并没有定位点。因此，这里遍历商户时，下标需要减一
+					if (currentItemIndex > 0) {
+						currentItemIndex -= 1;
+					}
+					Merchant mer = merchants.get(currentItemIndex);
+
+					// 设置导航的起点和终点。起点为定位的当前位置，终点为餐馆的位置。
+					MKPlanNode end = new MKPlanNode();
+					MKPlanNode start = new MKPlanNode();
+					double[] endPoint = BMapUtil.bd_encrypt(
+							Double.parseDouble(mer.getLat()),
+							Double.parseDouble(mer.getLon()));
+					start.pt = new GeoPoint((int) (currentLat * 1E6),
+							(int) (currentLon * 1E6));// 设置驾车路线搜索策略，时间优先、费用最少或距离最短
+					end.pt = new GeoPoint((int) (endPoint[1] * 1E6),
+							(int) (endPoint[0] * 1E6));
+					mSearch.walkingSearch("北京", start, "北京", end);
 				}
 			}
 		};
 		pop = new PopupOverlay(mMapView, popListener);
 		new Thread(runnable).start();
-
-		// 从Application中获取当前位置的坐标。
-		LocationData ld = app.getLocData();
-		currentLat = ld.latitude;
-		currentLon = ld.longitude;
-
 	}
 
 	@Override
@@ -149,6 +317,7 @@ public class LocationOverlayActivity extends Activity {
 	protected void onDestroy() {
 		overlayItems.clear();
 		mMapView.destroy();
+		mSearch.destory();
 		super.onDestroy();
 	}
 
@@ -168,7 +337,9 @@ public class LocationOverlayActivity extends Activity {
 	private void initOverlay() {
 		// 清除图层上以前的元素
 		mMapView.getOverlays().clear();
-		// overlayItems.clear();
+		overlayItems.clear();
+		// 恢复地图缩放级别为15
+		mMapView.getController().setZoom(15);
 
 		/**
 		 * 向地图添加自定义View.
