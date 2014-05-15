@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -54,7 +55,7 @@ public class OrderDishActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dishlist);
-	
+
 		mChecked = new ArrayList<Boolean>();
 		initLoadingDialog();
 		Intent intent = getIntent();
@@ -120,8 +121,9 @@ public class OrderDishActivity extends ListActivity {
 
 				StringBuilder sb = new StringBuilder();
 				String string = new String();
+				int totaldish = 0;
 				for (int i = 0; i < selectedID.size(); i++) {
-
+					totaldish++;
 					sb.append("," + totalID.get(selectedID.get(i)));
 
 				}
@@ -136,11 +138,12 @@ public class OrderDishActivity extends ListActivity {
 				Intent intent = new Intent();
 				intent.putExtra("totalID", str);
 				intent.putExtra("totalPrice", str2);
+				intent.putExtra("totalDish", String.valueOf(totaldish));
 				intent.setClass(OrderDishActivity.this,
 						RestaurantDetailActivity.class);
 
-				//startActivity(intent);
-				
+				// startActivity(intent);
+
 				AlertDialog.Builder builder2 = new AlertDialog.Builder(
 						OrderDishActivity.this);
 				builder2.setMessage(str2);

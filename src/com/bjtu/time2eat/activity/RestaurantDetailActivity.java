@@ -2,6 +2,7 @@ package com.bjtu.time2eat.activity;
 
 import java.util.Calendar;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -23,31 +24,37 @@ import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
 
 public class RestaurantDetailActivity extends Activity {
+	private Calendar c;
 	private EditText date;
 	private EditText time;
 	private EditText phone;
 	private TextView restID;
+	private TextView totalID;
+	private TextView totalPrice;
 	private Button yesorderButton;
+	private Button orderDishButton;
+	private static final int OTHER = 1;
 	private final static int DATE_DIALOG = 0;
 	private final static int TIME_DIALOG = 1;
-	private Calendar c;
 	private RestaurantService resService = new RestaurantService();
-	private static final int OTHER = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.restdetail);
 
+		yesorderButton = (Button) findViewById(R.id.yesOrderBtn);
+		orderDishButton = (Button) findViewById(R.id.orderDishBtn);
+		restID = (TextView) findViewById(R.id.showRestID);
+		totalID = (TextView) findViewById(R.id.totalID);
+		totalPrice = (TextView) findViewById(R.id.totalPrice);
 		date = (EditText) findViewById(R.id.date);
 		time = (EditText) findViewById(R.id.time);
 		phone = (EditText) findViewById(R.id.phone);
+
 		date.setFocusable(false);
 		time.setFocusable(false);
 		// phone.setFocusable(false);
-		yesorderButton = (Button) findViewById(R.id.yesOrderBtn);
-		restID = (TextView) findViewById(R.id.showRestID);
-
 		Intent intent = getIntent();
 		restID.setText(intent.getStringExtra("id"));
 		TextView restName = (TextView) findViewById(R.id.showRestName);
@@ -81,17 +88,6 @@ public class RestaurantDetailActivity extends Activity {
 			}
 		});
 
-		/*
-		 * phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-		 * 
-		 * @Override public void onFocusChange(View v, boolean hasFocus) { //
-		 * TODO Auto-generated method stub if(hasFocus) { phone.setText(""); }
-		 * else { if(phone.getText().toString().endsWith("请输入手机号码"))
-		 * {phone.setText("");} }
-		 * 
-		 * } });
-		 */
-
 		yesorderButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -103,36 +99,11 @@ public class RestaurantDetailActivity extends Activity {
 					Toast.makeText(getApplicationContext(), "请输入必要的订餐信息",
 							Toast.LENGTH_SHORT).show();
 
-					/*
-					 * long calID = 3; long startMillis = 0; long endMillis = 0;
-					 * Calendar beginTime= Calendar.getInstance();
-					 * beginTime.set(2014, 4, 15, 18, 49);
-					 * startMillis=beginTime.getTimeInMillis(); Calendar endTime
-					 * = Calendar.getInstance(); endTime.set(2014, 4, 15, 18,
-					 * 59); endMillis=endTime.getTimeInMillis();
-					 * 
-					 * ContentResolver cr = getContentResolver(); ContentValues
-					 * values = new ContentValues(); values.put(Events.DTSTART,
-					 * startMillis); values.put(Events.DTEND, endMillis);
-					 * values.put(Events.TITLE, "hello");
-					 * values.put(Events.DESCRIPTION, "calendar");
-					 * values.put(Events.CALENDAR_ID, calID);
-					 * values.put(Events.EVENT_TIMEZONE, "China/Bei_Jing");
-					 * //values.put(Events., "hello"); Uri uri =
-					 * cr.insert(Events.CONTENT_URI, values); long eventID =
-					 * Long.parseLong(uri.getLastPathSegment()); ContentResolver
-					 * cd = getContentResolver(); ContentValues value = new
-					 * ContentValues(); value.put(Reminders.MINUTES, 5);
-					 * value.put(Reminders.EVENT_ID, eventID);
-					 * value.put(Reminders.METHOD, Reminders.METHOD_ALERT); Uri
-					 * uri1 = cd.insert(Reminders.CONTENT_URI, values);
-					 */
-
 				} else {
 					try {
 						Response<RestaurantOrder> response = resService
 								.restaurantOrder(restID.getText().toString(),
-										phone.getText().toString(), "精品水煮鱼",
+										phone.getText().toString(), totalID.getText().toString(),
 										date.getText().toString(), time
 												.getText().toString());
 						String statusString = null;
@@ -144,7 +115,7 @@ public class RestaurantDetailActivity extends Activity {
 								Toast.LENGTH_LONG).show();
 
 					} catch (Exception e) {
-						// TODO: handle exception
+						
 					}
 
 				}
@@ -153,7 +124,6 @@ public class RestaurantDetailActivity extends Activity {
 
 	}
 
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -164,8 +134,12 @@ public class RestaurantDetailActivity extends Activity {
 			// 根据请求返回值得结果码 再进行匹配
 			switch (resultCode) {
 			case RESULT_OK:
-				Toast.makeText(this, "返回的数据" + data.getStringExtra("totalID"),
-						Toast.LENGTH_LONG).show();
+				totalID.setText(data.getStringExtra("totalID"));
+				totalPrice.setText(data.getStringExtra("totalPrice"));
+				orderDishButton.setText("已点"+data.getStringExtra("totalDish")+"道菜共"+data.getStringExtra("totalPrice")+"元");
+				
+				// Toast.makeText(this, data.getStringExtra("totalID"),
+				// Toast.LENGTH_LONG).show();
 				break;
 
 			default:
@@ -217,21 +191,8 @@ public class RestaurantDetailActivity extends Activity {
 		intent.setClass(RestaurantDetailActivity.this, OrderDishActivity.class);
 		// intent.putExtra("name", restInfo.getName());
 		intent.putExtra("restID", restID.getText().toString());
-		//startActivity(intent);
-		startActivityForResult(intent, OTHER);
-		
-	}
-	
-	/*public void goOtherActivity(View v) {
-
-		// 返回数据的获取的操作
-		Intent intent = new Intent(RestaurantDetailActivity.this,
-				OrderDishActivity.class);
-		intent.putExtra("totalID", "shasha");
-		intent.putExtra("totalPrice", "xxxx");
-		// 新打开的activity返回的数据
+		// startActivity(intent);
 		startActivityForResult(intent, OTHER);
 	}
-*/
 
 }
