@@ -9,8 +9,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,9 +20,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bjtu.time2eat.pojo.Menu;
@@ -35,11 +38,15 @@ public class OrderDishActivity extends ListActivity {
 	private String[] dishInfo;
 	private String restID;
 	private Button yesBtn;
+	private ImageView yesimage;
 	private ListView dishlist;
-	private List<Boolean> mChecked;		
-	//mChecked = new ArrayList<Boolean>();
-	private List<Integer> listItemID = new ArrayList<Integer>();
-	private CheckBox checkBox;
+	private List<Boolean> mChecked;
+	Context mContext;
+	private List<String> totalID = new ArrayList<String>();
+	private List<String> totalPrice = new ArrayList<String>();
+
+	private List<Integer> selectedID = new ArrayList<Integer>();
+	List<Dish> listDish;
 	private ProgressDialog m_pDialog;
 	private List<Map<String, Object>> list = null;
 	private RestaurantService resService = new RestaurantService();
@@ -48,60 +55,102 @@ public class OrderDishActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dishlist);
+		mChecked = new ArrayList<Boolean>();
 		initLoadingDialog();
 		Intent intent = getIntent();
 		restID = intent.getStringExtra("restID");
-		yesBtn= (Button) findViewById(R.id.dishBtn);
-		//checkBox = (CheckBox) findViewById(R.id.CheckBox01);
-		//dishlist=(ListView) findViewById(R.id.dishlist);
-	
-		//checkBox.
-		/*dishlist.setOnItemClickListener(new OnItemClickListener() {
+		yesBtn = (Button) findViewById(R.id.dishBtn);
+		// dishlist=(ListView) findViewById(R.id.dishlist);
+		mContext = getApplicationContext();
+		new Thread(runnable).start();
+		dishlist = getListView();
+		// 点菜
+		dishlist.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), arg2,Toast.LENGTH_SHORT).show();
+				if (mChecked.get(arg2) == false) {
+					int total = 0;
+					mChecked.set(arg2, true);
+					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
+					yesimage.setImageResource(R.drawable.yeschoose);
+					TextView t1 = (TextView) arg1.findViewById(R.id.dishprice);
+					// Toast.makeText(getApplicationContext(),
+					// t1.getText().toString(), Toast.LENGTH_SHORT).show();
+					for (int i = 0; i < mChecked.size(); i++) {
+						if (mChecked.get(i)) {
+							total = total + Integer.parseInt(totalPrice.get(i));
+						}
+					}
+					yesBtn.setText("确定(总计" + total + "元)");
+					arg1.setBackgroundColor(Color.parseColor("#FF9900"));
+				} else {
+					mChecked.set(arg2, false);
+					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
+					yesimage.setImageResource(R.drawable.nochoose);
+					arg1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+					int total = 0;
+					for (int i = 0; i < mChecked.size(); i++) {
+						if (mChecked.get(i)) {
+							total = total + Integer.parseInt(totalPrice.get(i));
+						}
+					}
+					yesBtn.setText("确定(总计" + total + "元)");
+				}/**/
 			}
-			
 		});
-		
-		this.getListView().setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> adapterView, View view,
-					int position, long id) {
-				//checkBox.setChecked(mChecked.get(position));
-				Toast.makeText(getApplicationContext(), position,Toast.LENGTH_SHORT).show();
+
+		yesBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				selectedID.clear();
+				for (int i = 0; i < mChecked.size(); i++) {
+					if (mChecked.get(i)) {
+						selectedID.add(i);// adapter.listPerson;
+					}
+				}
+				/*if (selectedID.size() == 0) {
+					AlertDialog.Builder builder1 = new AlertDialog.Builder(
+							OrderDishActivity.this);
+					builder1.setMessage("没有选中任何记录");
+					builder1.show();
+				} else {*/
+					
+					StringBuilder sb = new StringBuilder();
+					String string=new String();
+					for (int i = 0; i < selectedID.size(); i++) {
+						
+						sb.append("," + totalID.get(selectedID.get(i))
+								);
+											
+					}
+					
+					string=sb.toString();	
+					//string.su
+					String str=string.substring(1, string.length());//菜品ID
+					String totalprice=new String();
+					totalprice=yesBtn.getText().toString();					
+					String str2=totalprice.substring(5, yesBtn.getText().toString().length()-2);//菜品总价
+					Intent intent =new Intent();
+					intent.putExtra("totalID", str);
+					intent.putExtra("totalPrice", str2);
+					intent.setClass(OrderDishActivity.this, RestaurantDetailActivity.class);
+					
+					startActivity(intent);
+					System.out.println(string);
+					
+					AlertDialog.Builder builder2 = new AlertDialog.Builder(
+							OrderDishActivity.this);
+					builder2.setMessage(str2);
+					builder2.show();
+				//}
+				
 
 			}
-		});*/
-		new Thread(runnable).start();
-		
-		
-		
-		/*checkBox.setOnClickListener(new View.OnClickListener() {
-			int position;
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				checkBox.setChecked(mChecked.get(position));
-			}
-		});*/
-		yesBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				StringBuilder sb = new StringBuilder();				
-				for(int i=0;i<listItemID.size();i++){
-					sb.append("ItemID="+listItemID.get(i)+" . ");
-				}
-				AlertDialog.Builder builder2 = new AlertDialog.Builder(OrderDishActivity.this);
-				builder2.setMessage(sb.toString());
-				builder2.show();
-				
-			}
 		});
-		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -142,24 +191,27 @@ public class OrderDishActivity extends ListActivity {
 			Bundle bundle = msg.getData();
 			String[] txt = (String[]) bundle.get("dishs");
 			list = new ArrayList<Map<String, Object>>();
-			mChecked = new ArrayList<Boolean>();
+
 			for (int i = 0; i < txt.length; i++) {
 				dishInfo = txt[i].split("\\|");// 将获得的字符串
 				Map<String, Object> map = new HashMap<String, Object>();
 				map = new HashMap<String, Object>();
-				//map.put("id",dishInfo[0]);
+				map.put("id", dishInfo[0]);
 				map.put("name", dishInfo[1]);
 				map.put("price", dishInfo[2]);
-	    		mChecked.add(false);
+				// map.put("image", dishInfo[3]);
+				totalID.add(dishInfo[0]);
+				totalPrice.add(dishInfo[2]);
+				mChecked.add(false);
 				//
 				list.add(map);
 			}/**/
 			SimpleAdapter adapter = new SimpleAdapter(OrderDishActivity.this,
-					list, R.layout.dishlistitem, new String[] { "name",
-							"price" }, new int[] { R.id.dishname,
-							R.id.dishprice});
+					list, R.layout.dishlistitem, new String[] { "id", "name",
+							"price" }, new int[] { R.id.dishid, R.id.dishname,
+							R.id.dishprice });
 			setListAdapter(adapter);
-			
+
 		}
 	};
 
@@ -174,8 +226,8 @@ public class OrderDishActivity extends ListActivity {
 				String[] dishs = new String[list.getData().getMenu().size()];
 				int i = 0;
 				for (Menu dish : list.getData().getMenu()) {
-					dishs[i++] = dish.getId() + "|" + "菜品名称：" + dish.getName()
-							+ "|" + "菜品价格：" + dish.getPrice();
+					dishs[i++] = dish.getId() + "|" + dish.getName() + "|"
+							+ dish.getPrice();
 				}
 				bundle.putCharSequenceArray("dishs", dishs);
 				msg.setData(bundle);
@@ -183,5 +235,5 @@ public class OrderDishActivity extends ListActivity {
 			hander.sendMessage(msg);
 		}
 	};
-}
 
+}
