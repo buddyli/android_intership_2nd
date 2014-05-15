@@ -100,6 +100,11 @@ public class LocationOverlayActivity extends Activity {
 				if (index == 0) {
 					Intent intent = new Intent(LocationOverlayActivity.this,
 							RestaurantDetailActivity.class);
+
+					// 因为地图打点时还有当前的定位的点，这个点是第一个。但是merchants列表中并没有定位点。因此，这里遍历商户时，下标需要减一
+					if (currentItemIndex > 0) {
+						currentItemIndex -= 1;
+					}
 					Merchant mer = merchants.get(currentItemIndex);
 					Toast.makeText(LocationOverlayActivity.this,
 							"跳转到餐馆: " + mer.getName(), Toast.LENGTH_SHORT)
@@ -179,8 +184,8 @@ public class LocationOverlayActivity extends Activity {
 		 * 在想要添加Overlay的地方使用以下代码， 比如Activity的onCreate()丿
 		 */
 		Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
-		Drawable navMark = getResources()
-				.getDrawable(R.drawable.bg_map_location);
+		Drawable navMark = getResources().getDrawable(
+				R.drawable.bg_map_location);
 		// 创建IteminizedOverlay
 		MyOverlay itemOverlay = new MyOverlay(mark, mMapView);
 
@@ -229,7 +234,6 @@ public class LocationOverlayActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-
 			Bundle bundle = msg.getData();
 			Object obj = bundle.getSerializable("merchants");
 			if (obj != null) {
