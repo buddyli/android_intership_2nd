@@ -47,5 +47,16 @@
         android:singleLine="true"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#FFFFFF" />
+    <CheckBox
+        android:id="@+id/item_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20sp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center_vertical" />
 
 </RelativeLayout>
