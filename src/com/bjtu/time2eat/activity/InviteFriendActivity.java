@@ -8,17 +8,23 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.bjtu.time2eat.pojo.Contact;
 import com.bjtu.time2eat.view.QuickAlphabeticBar;
 import com.bjtu.time2eat.view.ContactListAdapter;
 import com.example.time2eat.R;
+import com.bjtu.time2eat.view.ContactListAdapter.ViewHolder;
 
 /**
  * 邀请好友
@@ -40,6 +46,61 @@ public class InviteFriendActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contact_list_view);
 		contactList = (ListView) findViewById(R.id.contact_list);
+		Button btn_add = (Button) findViewById(R.id.btn_add);
+        Button btn_back = (Button) findViewById(R.id.btn_back);
+		
+		contactList.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				// 取得ViewHolder对象，这样就省去了通过层层的findViewById去实例化我们需要的cb实例的步骤
+				ViewHolder holder = (ViewHolder) view.getTag();
+				// 改变CheckBox的状态
+                holder.cb.toggle();
+             // 将CheckBox的选中状况记录下来
+                if (holder.cb.isChecked() == true) {
+                    list.get(position).isChecked = true;                    
+                }
+                else {
+                    list.get(position).isChecked = false;                 
+                }
+			}
+        	
+        });
+		
+		btn_add.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				ArrayList<String> phoneNum =new ArrayList<String>();					
+				for(int i=0;i<list.size();i++){
+					if(list.get(i).isChecked==true){
+						phoneNum.add(list.get(i).getPhoneNum());
+					}
+				}
+				
+				StringBuffer numberEvery = new StringBuffer();
+				for(int j=0;j<phoneNum.size();j++){
+					numberEvery = numberEvery.append(phoneNum.get(j)+",");
+				}
+				Uri uri = Uri.parse("smsto:"+numberEvery.toString());  
+				Intent it = new Intent(Intent.ACTION_SENDTO, uri);  
+				startActivity(it);
+			}
+			
+		});
+		
+		btn_back.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+			
+		});
+		
 		alphabeticBar = (QuickAlphabeticBar) findViewById(R.id.fast_scroller);
 
 		// 实例化
@@ -97,6 +158,7 @@ public class InviteFriendActivity extends Activity{
 						contact.setSortKey(sortKey);
 						contact.setPhotoId(photoId);
 						contact.setLookUpKey(lookUpKey);
+						contact.setIsChecked(false);
 						list.add(contact);
 
 						contactIdMap.put(contactId, contact);
