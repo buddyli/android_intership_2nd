@@ -48,5 +48,36 @@
         android:textColor="#404040"
         android:textSize="48dip"
         android:visibility="invisible" />
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:stretchColumns="2" >
+
+            <TableRow android:gravity="center_horizontal" >
+
+                <Button
+                    android:id="@+id/btn_add"
+                    android:layout_weight="1"
+                    android:text="确定"
+                    android:textSize="18dip"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_weight="1"
+                    android:text="取消"
+                    android:textSize="18dip"
+                    android:textStyle="bold" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 
 </RelativeLayout>
