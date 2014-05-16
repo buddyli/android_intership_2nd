@@ -18,34 +18,63 @@
         android:id="@+id/showRestName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"         
-        android:layout_below="@id/showRestNamePic" 
+        android:layout_alignParentTop="true"   
+        android:layout_toRightOf="@id/showRestNamePic" 
         android:textSize="20sp" />
     
      
-     <TextView        
-        android:id="@+id/showRestAddress"
+     
+    <ImageView        
+        android:id="@+id/showRestTelPic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"         
-        android:layout_below="@id/showRestName" 
-        android:textSize="20sp" />
+        android:contentDescription="@string/res_icon"           
+        android:layout_below="@id/showRestNamePic"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/result_list_item_phone"/>
     
       <TextView        
         android:id="@+id/showRestTelno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"         
-        android:layout_below="@id/showRestAddress" 
+        android:layout_alignParentLeft="true"       
+        android:layout_toRightOf="@id/showRestTelPic"
+        android:layout_below="@+id/showRestName"  
         android:textSize="20sp" />
+      
+    <ImageView        
+        android:id="@+id/showRestAddressPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/res_icon"         
+        android:layout_below="@id/showRestTelPic"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/result_list_item_address"/>
+    
+     <TextView        
+        android:id="@+id/showRestAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showRestTelno"               
+        android:layout_toRightOf="@id/showRestAddressPic" 
+        android:textSize="20sp" />
+     
+     <ImageView        
+        android:id="@+id/showRestPricePic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/res_icon"         
+        android:layout_below="@id/showRestAddressPic"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/result_list_item_capita"/>
     
       
      <TextView        
         android:id="@+id/showRestPrice"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"         
-        android:layout_below="@id/showRestTelno" 
+        android:layout_height="wrap_content"  
+        android:layout_below="@+id/showRestAddress"     
+        android:layout_toRightOf="@id/showRestPricePic" 
         android:textSize="20sp" />
         
              
@@ -55,7 +84,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"         
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/showRestPrice"
+        android:layout_below="@id/showRestPricePic"
         android:text="@string/orderdate"
         android:cursorVisible="false" />
     
