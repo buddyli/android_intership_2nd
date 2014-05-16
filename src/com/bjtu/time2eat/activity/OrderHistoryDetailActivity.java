@@ -21,12 +21,18 @@ import android.widget.TextView;
 
 import com.example.time2eat.R;
 import com.bjtu.time2eat.pojo.Menu;
+import com.bjtu.time2eat.pojo.Response;
+import com.bjtu.time2eat.pojo.resbody.RestaurantMenu;
+import com.bjtu.time2eat.service.RestaurantService;;
 
 public class OrderHistoryDetailActivity extends Activity{
+	private RestaurantService restaurantservice = new RestaurantService();
 	private List<Map<String, Object>> meallist;
 	private ListView listview;  
     public MyAdapter adapter; 
     private String orders;
+    private String danjia;
+    private String restaurantid=null;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,9 @@ public class OrderHistoryDetailActivity extends Activity{
 	    orders = intent.getStringExtra("orders");
 	    String id = intent.getStringExtra("id");
 	    String totalprice = intent.getStringExtra("totalprice");
+	    String merchantname = intent.getStringExtra("merchantname");
+	    String personnum = intent.getStringExtra("personnum");
+	    restaurantid = intent.getStringExtra("Restaurant_id");
 		//setContentView(R.layout.orderhistory_detail);			
 		setContentView(R.layout.orderhistory_detail);  
         listview = (ListView) findViewById(R.id.mealitem_listview);   
@@ -53,6 +62,10 @@ public class OrderHistoryDetailActivity extends Activity{
 		}
 		TextView tp = (TextView) this.findViewById(R.id.totalprice);
 		tp.setText(totalprice);
+		TextView mn = (TextView) this.findViewById(R.id.merchantname);
+		mn.setText(merchantname);
+		TextView pn = (TextView) this.findViewById(R.id.personnum);
+		pn.setText(personnum);
 		
 	}
 	
@@ -66,8 +79,7 @@ public class OrderHistoryDetailActivity extends Activity{
 		
 
 		private LayoutInflater mInflater;
-		
-		
+		//Response<RestaurantMenu> list = restaurantservice.restaurantMenu(restaurantid);
 		public MyAdapter(Context context){
 			this.mInflater = LayoutInflater.from(context);
 			meallist = new ArrayList<Map<String,Object>>();
@@ -77,9 +89,15 @@ public class OrderHistoryDetailActivity extends Activity{
 					Map<String, Object> map = new HashMap<String, Object>();
 					map = new HashMap<String, Object>();
 					map.put("mealname",arr.getString(i));
-					Menu m = new Menu();
-					m.setName(arr.getString(i));
-					map.put("pieceprice", m.getPrice());
+					//Menu m = new Menu();
+					//String[] menus = new String[list.getData().getMenu().size()];
+					//int j = 0;
+					/*for(Menu menu : list.getData().getMenu()){
+						if(menu.getName()==arr.getString(i)){ danjia=menu.getPrice();}
+					}*/
+					
+					//m.setName(arr.getString(i));
+					//map.put("pieceprice", "100");
 					meallist.add(map);
 				}
 			} catch (JSONException e) {
