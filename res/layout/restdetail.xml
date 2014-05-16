@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"         
         android:layout_alignParentLeft="true"               
         android:layout_below="@id/showRestPrice"
-        android:text="请选择订餐日期"
+        android:text="@string/orderdate"
         android:cursorVisible="false" />
     
      <EditText 
@@ -64,35 +64,44 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"        
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/date"    
-        android:text="请选择订餐时间"
+        android:layout_below="@id/date"   
+        android:text="@string/ordertime"
         android:cursorVisible="false" />
     
      <EditText 
-        android:id="@+id/phone" 
-        android:inputType="phone"         
-        android:text="请输入手机号码"
+        android:id="@+id/phone"
+        android:inputType="phone"    
+        android:text="@string/phonenumber"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"      
         android:layout_alignParentLeft="true"               
         android:layout_below="@id/time" />
      
+       <EditText 
+        android:id="@+id/peoplenum" 
+        android:inputType="number"    
+        android:text="@string/peoplenumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"      
+        android:layout_alignParentLeft="true"               
+        android:layout_below="@id/phone" />
+     
       <Button 
-        android:text="订菜"
         android:id="@+id/orderDishBtn" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="openOrderDish"    
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/phone"  />
+        android:layout_below="@id/peoplenum" 
+        android:text="@string/orderdish" />
       
  	  <Button 
-        android:text="确定订座" 
         android:id="@+id/yesOrderBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"   
         android:layout_alignParentLeft="true"               
-        android:layout_below="@id/orderDishBtn"  />
+        android:layout_below="@id/orderDishBtn" 
+        android:text="@string/yesorderBtn" />
  	  
  	   <TextView        
         android:id="@+id/totalID"
