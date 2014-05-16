@@ -29,11 +29,11 @@ public class MainActivity extends Activity {
 		// Intent intent2 = new Intent(this, MyLocationActivity.class);
 		Intent intent3 = new Intent(this, UserActivity.class);
 		// Intent intent4=new Intent(this, RestaurantListActivity.class);
-		tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("商户列表")
+		tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("", getResources().getDrawable(R.drawable.home))
 				.setContent(intent1));
-		tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("地图模式")
+		tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("", getResources().getDrawable(R.drawable.map))
 				.setContent(intent2));
-		tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("个人中心")
+		tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("", getResources().getDrawable(R.drawable.user))
 				.setContent(intent3));
 		// tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("更多").setContent(intent4));
 		// tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("更多",
