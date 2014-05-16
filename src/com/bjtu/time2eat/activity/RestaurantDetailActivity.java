@@ -7,10 +7,15 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.CalendarContract.Events;
+import android.provider.CalendarContract.Reminders;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -75,14 +80,14 @@ public class RestaurantDetailActivity extends Activity {
 		TextView restTelno = (TextView) findViewById(R.id.showRestTelno);
 		restTelno.setText(intent.getStringExtra("telno"));
 		TextView restPrice = (TextView) findViewById(R.id.showRestPrice);
-		restPrice.setText(intent.getStringExtra("distance" + "米"));
-		// TextView restStar = (TextView) findViewById(R.id.star);
-		restPrice.setText(intent.getStringExtra("star"));
-		// TextView restDistance = (TextView) findViewById(R.id.showRestDis);
-		restPrice.setText(intent.getStringExtra("distance"));
-		// TextView restTradeName = (TextView) findViewById(R.id.trade_name);
-		restPrice.setText(intent.getStringExtra("trade_name"));
-		// intent.getExtras()
+		restPrice.setText(intent.getStringExtra("price" + "元"));
+		TextView restStar = (TextView) findViewById(R.id.star);
+		restStar.setText(intent.getStringExtra("star"));
+		TextView restDistance = (TextView) findViewById(R.id.showRestDis);
+		restDistance.setText(intent.getStringExtra("distance"+"米"));
+		TextView restTradeName = (TextView) findViewById(R.id.trade_name);
+		restTradeName.setText(intent.getStringExtra("trade_name"));
+		//intent.getExtras();
 
 		date.setOnClickListener(new View.OnClickListener() {// 日期对话框
 			@SuppressWarnings("deprecation")
@@ -125,6 +130,56 @@ public class RestaurantDetailActivity extends Activity {
 				} else {
 					try {
 						// TODO 用餐人数，这里需要根据用户的输入修改
+						long calID = 3;
+						long startMillis = 0;
+						long endMillis = 0;
+						
+						Toast.makeText(getApplicationContext(), date.getText().toString(),
+								Toast.LENGTH_SHORT).show();
+						
+						
+						String s=new String();
+						s=date.getText().toString();
+						
+						String[] dateArray=s.split("-");
+						
+						String t=new String();
+						t=time.getText().toString();
+						String[] time=t.split(":");
+						
+						String information=new String("您在"+"定了餐！ 时间为："+s+"  "+t+" 请前去就餐！");
+				        
+						
+						Calendar beginTime= Calendar.getInstance();
+						beginTime.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+						startMillis=beginTime.getTimeInMillis();
+						Calendar endTime = Calendar.getInstance();
+						endTime.set(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1])-1,Integer.parseInt(dateArray[2]),Integer.parseInt(time[0]) , Integer.parseInt(time[1]));
+						endMillis=endTime.getTimeInMillis();
+						
+						ContentResolver cr = getContentResolver();
+						ContentValues values = new ContentValues();
+						values.put(Events.DTSTART, startMillis);
+						values.put(Events.DTEND, endMillis);
+						values.put(Events.TITLE, "订餐69");
+						values.put(Events.DESCRIPTION, information);
+						values.put(Events.CALENDAR_ID, calID);
+						values.put(Events.EVENT_TIMEZONE, "China/Bei_Jing");
+						values.put(Events.HAS_ALARM, 1);
+						Uri uri = cr.insert(Events.CONTENT_URI, values);
+						
+						long eventID = Long.parseLong(uri.getLastPathSegment());
+						
+						ContentValues otherValues= new ContentValues();
+						otherValues.put(Events._ID, eventID);
+						otherValues.put(Reminders.EVENT_ID, eventID);
+						otherValues.put(Reminders.MINUTES,10);
+						otherValues.put(Reminders.METHOD, Reminders.METHOD_ALERT);
+						
+						cr.insert(Events.CONTENT_URI, otherValues);
+						Toast.makeText(RestaurantDetailActivity.this,"插入日历提醒事件成功!",Toast.LENGTH_LONG).show();  
+						
+						
 						new Thread(runnable).start();
 					} catch (Exception e) {
 

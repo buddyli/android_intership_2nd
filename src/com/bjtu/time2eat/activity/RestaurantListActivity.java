@@ -49,12 +49,7 @@ public class RestaurantListActivity extends ListActivity {
 				Intent intent = new Intent();
 				intent.setClass(RestaurantListActivity.this,
 						RestaurantDetailActivity.class);
-				// intent.putExtra("id", restInfo[0]);
-				// intent.putExtra("name",restInfo[1]);
-				// intent.putExtra("address",restInfo[2]);
-				// intent.putExtra("telno",restInfo[3]);
-				// intent.putExtra("price",restInfo[4]);
-
+				
 				intent.putExtra("id", list.get(position).get("id").toString());
 				intent.putExtra("name", list.get(position).get("name")
 						.toString());
@@ -64,7 +59,7 @@ public class RestaurantListActivity extends ListActivity {
 						.toString());
 				intent.putExtra("telno", list.get(position).get("telno")
 						.toString());
-				intent.putExtra("diatance", list.get(position).get("diatance")
+				intent.putExtra("distance", list.get(position).get("distance")
 						.toString());
 				intent.putExtra("star", list.get(position).get("star")
 						.toString());
