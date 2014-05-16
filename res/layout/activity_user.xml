@@ -3,7 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
+    <LinearLayout
+        android:id="@+id/phonenum_enter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/loginTextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dip"
+            android:gravity="center_horizontal"
+            android:text="请输入手机号码"
+            android:textColor="#000000"
+            android:textSize="20dip" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/phonenumEditText"
+            android:inputType="phone"  
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000000"
+            android:width="180dip" >
+        </EditText>
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_my_order"
         android:layout_width="match_parent"
@@ -15,6 +44,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="邀请好友" />
-    
 
 </LinearLayout>
