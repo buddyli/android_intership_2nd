@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <TextView        
-        android:id="@+id/showRestID"
+    <ImageView        
+        android:id="@+id/showRestNamePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/res_icon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"   
-        android:textSize="20sp"/>
+        android:background="@drawable/restpic18"/>
     
     
     <TextView        
@@ -18,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"         
-        android:layout_below="@id/showRestID" 
+        android:layout_below="@id/showRestNamePic" 
         android:textSize="20sp" />
     
      
