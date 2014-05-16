@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class ContactListAdapter extends BaseAdapter {
 			holder.alpha = (TextView) convertView.findViewById(R.id.alpha);
 			holder.name = (TextView) convertView.findViewById(R.id.name);
 			holder.number = (TextView) convertView.findViewById(R.id.number);
+			holder.cb = (CheckBox) convertView.findViewById(R.id.item_cb);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -105,6 +107,7 @@ public class ContactListAdapter extends BaseAdapter {
 		String number = contact.getPhoneNum();
 		holder.name.setText(name);
 		holder.number.setText(number);
+		holder.cb.setChecked(list.get(position).getIsChecked());
 		holder.quickContactBadge.assignContactUri(Contacts.getLookupUri(
 				contact.getContactId(), contact.getLookUpKey()));
 		if (0 == contact.getPhotoId()) {
@@ -133,11 +136,12 @@ public class ContactListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private static class ViewHolder {
+	public static class ViewHolder {
 		QuickContactBadge quickContactBadge;
 		TextView alpha;
 		TextView name;
 		TextView number;
+		public CheckBox cb;
 	}
 
 	/**
