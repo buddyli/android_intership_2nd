@@ -25,6 +25,11 @@ import com.bjtu.time2eat.pojo.resbody.RestaurantOrder;
 import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
 
+/**
+ * 
+ * @author LiuBao 商户详情
+ * 
+ */
 public class RestaurantDetailActivity extends Activity {
 	private Calendar c;
 	private EditText date;
@@ -126,8 +131,11 @@ public class RestaurantDetailActivity extends Activity {
 			case RESULT_OK:
 				totalID.setText(data.getStringExtra("totalID"));
 				totalPrice.setText(data.getStringExtra("totalPrice"));
-				orderDishButton.setText("已点" + data.getStringExtra("totalDish")
-						+ "道菜共" + data.getStringExtra("totalPrice") + "元");
+
+				orderDishButton.setText("已点"
+						+ data.getStringExtra("totalDishNum") + "道菜共"
+						+ data.getStringExtra("totalPrice") + "元");
+
 
 				// Toast.makeText(this, data.getStringExtra("totalID"),
 				// Toast.LENGTH_LONG).show();
@@ -180,9 +188,7 @@ public class RestaurantDetailActivity extends Activity {
 	public void openOrderDish(View v) {
 		Intent intent = new Intent();
 		intent.setClass(RestaurantDetailActivity.this, OrderDishActivity.class);
-		// intent.putExtra("name", restInfo.getName());
 		intent.putExtra("restID", restID.getText().toString());
-		// startActivity(intent);
 		startActivityForResult(intent, OTHER);
 	}
 
