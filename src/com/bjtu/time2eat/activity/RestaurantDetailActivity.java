@@ -37,7 +37,7 @@ public class RestaurantDetailActivity extends Activity {
 	private EditText time;// 就餐时间
 	private EditText phone;// 用户手机
 	private EditText peoplenum;// 就餐人数
-	private TextView restID;// 餐馆ID
+	private String restID;// 餐馆ID
 	private TextView totalID;// 订菜的总ID
 	private TextView totalPrice;// 订菜的总价
 	private Button yesorderButton;
@@ -54,7 +54,7 @@ public class RestaurantDetailActivity extends Activity {
 
 		yesorderButton = (Button) findViewById(R.id.yesOrderBtn);
 		orderDishButton = (Button) findViewById(R.id.orderDishBtn);
-		restID = (TextView) findViewById(R.id.showRestID);
+		//restID = (TextView) findViewById(R.id.showRestID);
 		totalID = (TextView) findViewById(R.id.totalID);
 		totalPrice = (TextView) findViewById(R.id.totalPrice);
 		date = (EditText) findViewById(R.id.date);
@@ -67,7 +67,7 @@ public class RestaurantDetailActivity extends Activity {
 		// phone.setFocusable(false);
 		// 从商户列表获得商户的信息
 		Intent intent = getIntent();
-		restID.setText(intent.getStringExtra("id"));
+		restID=intent.getStringExtra("id");
 		TextView restName = (TextView) findViewById(R.id.showRestName);
 		restName.setText(intent.getStringExtra("name"));
 		TextView restAddress = (TextView) findViewById(R.id.showRestAddress);
@@ -198,7 +198,7 @@ public class RestaurantDetailActivity extends Activity {
 	public void openOrderDish(View v) {
 		Intent intent = new Intent();
 		intent.setClass(RestaurantDetailActivity.this, OrderDishActivity.class);
-		intent.putExtra("restID", restID.getText().toString());
+		intent.putExtra("restID", restID);
 		startActivityForResult(intent, OTHER);
 	}
 
@@ -233,7 +233,7 @@ public class RestaurantDetailActivity extends Activity {
 			}
 
 			Response<RestaurantOrder> response = resService.restaurantOrder(
-					restID.getText().toString(), phone.getText().toString(),
+					restID, phone.getText().toString(),
 					totalID.getText().toString(), date.getText().toString(),
 					time.getText().toString(), peoplen);
 			// String statusString = null;
