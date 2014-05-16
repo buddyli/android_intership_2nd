@@ -80,7 +80,7 @@ public class RestaurantListActivity extends ListActivity {
 		// 设置进度条风格，风格为圆形，旋转的
 		m_pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		// 设置ProgressDialog 标题
-		m_pDialog.setTitle("玩命加载商户列表...");
+		m_pDialog.setTitle("玩命加载附近餐厅...");
 		// 设置ProgressDialog 提示信息
 		// m_pDialog.setMessage("正在加载历史预订记录...");
 		// 设置ProgressDialog 标题图标

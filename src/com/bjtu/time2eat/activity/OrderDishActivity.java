@@ -77,8 +77,8 @@ public class OrderDishActivity extends ListActivity {
 				if (mChecked.get(arg2) == false) {
 					int total = 0;
 					mChecked.set(arg2, true);
-					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
-					yesimage.setImageResource(R.drawable.yeschoose);
+//					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
+//					yesimage.setImageResource(R.drawable.yes);
 					// Toast.makeText(getApplicationContext(),
 					// t1.getText().toString(), Toast.LENGTH_SHORT).show();
 					for (int i = 0; i < mChecked.size(); i++) {
@@ -90,8 +90,8 @@ public class OrderDishActivity extends ListActivity {
 					arg1.setBackgroundColor(Color.parseColor("#FF9900"));
 				} else {
 					mChecked.set(arg2, false);
-					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
-					yesimage.setImageResource(R.drawable.nochoose);
+//					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
+//					yesimage.setImageResource(R.drawable.nochoose);
 					arg1.setBackgroundColor(Color.parseColor("#FFFFFF"));
 					int total = 0;
 					for (int i = 0; i < mChecked.size(); i++) {
@@ -228,8 +228,8 @@ public class OrderDishActivity extends ListActivity {
 				list.add(map);
 			}/**/
 			SimpleAdapter adapter = new SimpleAdapter(OrderDishActivity.this,
-					list, R.layout.dishlistitem, new String[] { "id", "name",
-							"price" }, new int[] { R.id.dishid, R.id.dishname,
+					list, R.layout.dishlistitem, new String[] { "name",
+							"price" }, new int[] { R.id.dishname,
 							R.id.dishprice });
 			setListAdapter(adapter);
 

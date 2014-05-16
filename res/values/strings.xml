@@ -16,5 +16,5 @@
     <string name="yesorderBtn">确定订座</string>
     <string name="way">获取路线</string>
     <string name="res_icon">餐馆图标</string>
-
+ <string name="menu_icon">菜品图标</string>
 </resources>
