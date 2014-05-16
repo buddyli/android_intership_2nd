@@ -2,6 +2,7 @@ package com.bjtu.time2eat.activity;
 
 import java.util.Calendar;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -32,12 +33,13 @@ import com.example.time2eat.R;
  */
 public class RestaurantDetailActivity extends Activity {
 	private Calendar c;
-	private EditText date;
-	private EditText time;
-	private EditText phone;
-	private TextView restID;
-	private TextView totalID;
-	private TextView totalPrice;
+	private EditText date; // 就餐日期
+	private EditText time;// 就餐时间
+	private EditText phone;// 用户手机
+	private EditText peoplenum;// 就餐人数
+	private TextView restID;// 餐馆ID
+	private TextView totalID;// 订菜的总ID
+	private TextView totalPrice;// 订菜的总价
 	private Button yesorderButton;
 	private Button orderDishButton;
 	private static final int OTHER = 1;
@@ -58,10 +60,12 @@ public class RestaurantDetailActivity extends Activity {
 		date = (EditText) findViewById(R.id.date);
 		time = (EditText) findViewById(R.id.time);
 		phone = (EditText) findViewById(R.id.phone);
+		peoplenum = (EditText) findViewById(R.id.peoplenum);
 
 		date.setFocusable(false);
 		time.setFocusable(false);
 		// phone.setFocusable(false);
+		// 从商户列表获得商户的信息
 		Intent intent = getIntent();
 		restID.setText(intent.getStringExtra("id"));
 		TextView restName = (TextView) findViewById(R.id.showRestName);
@@ -74,7 +78,7 @@ public class RestaurantDetailActivity extends Activity {
 		restPrice.setText(intent.getStringExtra("price" + "RMB"));
 		// intent.getExtras()
 
-		date.setOnClickListener(new View.OnClickListener() {
+		date.setOnClickListener(new View.OnClickListener() {// 日期对话框
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				// date.setInputType(InputType.TYPE_NULL);
@@ -82,7 +86,7 @@ public class RestaurantDetailActivity extends Activity {
 			}
 		});/**/
 
-		time.setOnClickListener(new View.OnClickListener() {
+		time.setOnClickListener(new View.OnClickListener() {// 时间对话框
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				showDialog(TIME_DIALOG);
@@ -93,14 +97,21 @@ public class RestaurantDetailActivity extends Activity {
 				phone.setText("");
 			}
 		});
+		peoplenum.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				peoplenum.setText("");
+			}
+		});
 
 		yesorderButton.setOnClickListener(new OnClickListener() {
-
+			// 强迫用户填入信息
 			public void onClick(View v) {
 				if (date.getText().toString().endsWith("请选择订餐日期")
 						|| time.getText().toString().endsWith("请选择订餐时间")
 						|| phone.getText().toString().equals("")
-						|| phone.getText().toString().equals("请输入手机号码")) {
+						|| phone.getText().toString().equals("请输入手机号码")
+						|| peoplenum.getText().toString().equals("请输入就餐人数")
+						|| peoplenum.getText().toString().equals("")) {
 
 					Toast.makeText(getApplicationContext(), "请输入必要的订餐信息",
 							Toast.LENGTH_SHORT).show();
@@ -135,7 +146,6 @@ public class RestaurantDetailActivity extends Activity {
 				orderDishButton.setText("已点"
 						+ data.getStringExtra("totalDishNum") + "道菜共"
 						+ data.getStringExtra("totalPrice") + "元");
-
 
 				// Toast.makeText(this, data.getStringExtra("totalID"),
 				// Toast.LENGTH_LONG).show();
@@ -215,12 +225,27 @@ public class RestaurantDetailActivity extends Activity {
 
 		@Override
 		public void run() {
-			int num = 1;
+			// int num = 1;
 
+			int peoplen = Integer.parseInt(peoplenum.getText().toString());
+						
+			Toast.makeText(RestaurantDetailActivity.this,
+					peoplenum.getText().toString(), Toast.LENGTH_LONG).show();
+			
+			if (peoplen < 1) {
+				peoplen = 1;
+			} else {
+				if (peoplen > 200) {
+					peoplen = 200;
+					Toast.makeText(RestaurantDetailActivity.this,
+							"对不起，我们这没那么大的地儿", Toast.LENGTH_LONG).show();
+				}
+
+			}
 			Response<RestaurantOrder> response = resService.restaurantOrder(
 					restID.getText().toString(), phone.getText().toString(),
 					totalID.getText().toString(), date.getText().toString(),
-					time.getText().toString(), num);
+					time.getText().toString(), peoplen);
 			// String statusString = null;
 			// statusString = response.getStatus().getMessage();
 			Message msg = new Message();
