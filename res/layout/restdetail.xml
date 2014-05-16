@@ -1,154 +1,196 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp" >
 
-    <ImageView        
-        android:id="@+id/showRestNamePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/res_icon"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"   
-        android:background="@drawable/restpic18"/>
-    
-    
-    <TextView        
-        android:id="@+id/showRestName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"   
-        android:layout_toRightOf="@id/showRestNamePic" 
-        android:textSize="20sp" />
-    
-     
-     
-    <ImageView        
-        android:id="@+id/showRestTelPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/res_icon"           
-        android:layout_below="@id/showRestNamePic"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/result_list_item_phone"/>
-    
-      <TextView        
-        android:id="@+id/showRestTelno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"       
-        android:layout_toRightOf="@id/showRestTelPic"
-        android:layout_below="@+id/showRestName"  
-        android:textSize="20sp" />
-      
-    <ImageView        
-        android:id="@+id/showRestAddressPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/res_icon"         
-        android:layout_below="@id/showRestTelPic"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/result_list_item_address"/>
-    
-     <TextView        
-        android:id="@+id/showRestAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/showRestTelno"               
-        android:layout_toRightOf="@id/showRestAddressPic" 
-        android:textSize="20sp" />
-     
-     <ImageView        
-        android:id="@+id/showRestPricePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/res_icon"         
-        android:layout_below="@id/showRestAddressPic"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/result_list_item_capita"/>
-    
-      
-     <TextView        
-        android:id="@+id/showRestPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"  
-        android:layout_below="@+id/showRestAddress"     
-        android:layout_toRightOf="@id/showRestPricePic" 
-        android:textSize="20sp" />
-        
-             
-     <EditText
-          android:id="@+id/date" 
-          android:inputType="date"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"         
-        android:layout_alignParentLeft="true"               
-        android:layout_below="@id/showRestPricePic"
-        android:text="@string/orderdate"
-        android:cursorVisible="false" />
-    
-     <EditText 
-         android:id="@+id/time"          
-          android:inputType="datetime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"        
-        android:layout_alignParentLeft="true"               
-        android:layout_below="@id/date"   
-        android:text="@string/ordertime"
-        android:cursorVisible="false" />
-    
-     <EditText 
-        android:id="@+id/phone"
-        android:inputType="phone"    
-        android:text="@string/phonenumber"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"      
-        android:layout_alignParentLeft="true"               
-        android:layout_below="@id/time" />
-     
-       <EditText 
-        android:id="@+id/peoplenum" 
-        android:inputType="number"    
-        android:text="@string/peoplenumber"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"      
-        android:layout_alignParentLeft="true"               
-        android:layout_below="@id/phone" />
-     
-      <Button 
-        android:id="@+id/orderDishBtn" 
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="openOrderDish"    
-        android:layout_alignParentLeft="true"               
-        android:layout_below="@id/peoplenum" 
-        android:text="@string/orderdish" />
-      
- 	  <Button 
-        android:id="@+id/yesOrderBtn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"   
-        android:layout_alignParentLeft="true"               
-        android:layout_below="@id/orderDishBtn" 
-        android:text="@string/yesorderBtn" />
- 	  
- 	   <TextView        
-        android:id="@+id/totalID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"         
-        android:layout_below="@id/yesOrderBtn" 
-        android:textSize="20sp" />
- 	   
- 	    <TextView        
-        android:id="@+id/totalPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"         
-        android:layout_below="@id/totalID" 
-        android:textSize="20sp" />
-      
-  
+        android:orientation="horizontal" >
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/showRestNamePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/restname"
+            android:contentDescription="@string/res_icon" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/showRestName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/showRestPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/result_list_item_address"
+                    android:text="2312312312" />
+
+                <TextView
+                    android:id="@+id/showRestDis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/result_list_item_address"
+                    android:text="2312312312" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/trade_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/result_list_item_address"
+            android:text="2312312312"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/result_list_item_address"
+            android:text="2312312312"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/showRestAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/result_list_item_address"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/showRestTelno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/result_list_item_address"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:cursorVisible="false"
+            android:inputType="date"
+            android:text="@string/orderdate" />
+
+        <EditText
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:cursorVisible="false"
+            android:inputType="datetime"
+            android:text="@string/ordertime" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="phone"
+            android:text="@string/phonenumber" />
+
+        <EditText
+            android:id="@+id/peoplenum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:text="@string/peoplenumber" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/orderDishBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="openOrderDish"
+            android:text="@string/orderdish" />
+
+        <Button
+            android:id="@+id/yesOrderBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/yesorderBtn" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/totalID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/totalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>
