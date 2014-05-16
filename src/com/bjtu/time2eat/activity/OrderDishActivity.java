@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bjtu.time2eat.pojo.Menu;
 import com.bjtu.time2eat.pojo.Response;
@@ -31,6 +32,11 @@ import com.bjtu.time2eat.pojo.resbody.RestaurantMenu;
 import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
 
+/**
+ * 
+ * @author LiuBao 订菜的动作
+ * 
+ */
 @SuppressLint("HandlerLeak")
 public class OrderDishActivity extends ListActivity {
 
@@ -111,44 +117,59 @@ public class OrderDishActivity extends ListActivity {
 						selectedID.add(i);// adapter.listPerson;
 					}
 				}
-				/*
-				 * if (selectedID.size() == 0) { AlertDialog.Builder builder1 =
-				 * new AlertDialog.Builder( OrderDishActivity.this);
-				 * builder1.setMessage("没有选中任何记录"); builder1.show(); } else {
-				 */
 
-				StringBuilder sb = new StringBuilder();
-				String string = new String();
-				int totaldish = 0;
-				for (int i = 0; i < selectedID.size(); i++) {
-					totaldish++;
-					sb.append("," + totalID.get(selectedID.get(i)));
+				if (selectedID.size() == 0) {
+					/*AlertDialog.Builder builder1 = new AlertDialog.Builder(
+							OrderDishActivity.this);
+					builder1.setMessage("没有选中任何记录");
+					builder1.show();*/
+					Intent intent = new Intent();
+					intent.putExtra("totalID", "");//所有菜品ID字符串
+					intent.putExtra("totalPrice", "0");//所有菜品总价
+					intent.putExtra("totalDishNum", "0");//菜品总个数
+					intent.setClass(OrderDishActivity.this,
+							RestaurantDetailActivity.class);					
+					AlertDialog.Builder builder2 = new AlertDialog.Builder(
+							OrderDishActivity.this);
+					builder2.setMessage("2121212");
+					builder2.show();
+					OrderDishActivity.this.setResult(RESULT_OK, intent);
+					OrderDishActivity.this.finish();
+					
+					Toast.makeText(OrderDishActivity.this, "您没有选择菜品", Toast.LENGTH_LONG).show();
+					
+				} else {
 
+					StringBuilder sb = new StringBuilder();
+					String string = new String();
+					int totaldish = 0;
+					for (int i = 0; i < selectedID.size(); i++) {
+						totaldish++;
+						sb.append("," + totalID.get(selectedID.get(i)));
+
+					}
+					//将菜品的所有ID加上“,”之后赋值给string
+					string = sb.toString();
+					
+					String str = string.substring(1, string.length());// 菜品ID//去掉第一个“，”
+					//
+					String totalprice = new String();//
+					totalprice = yesBtn.getText().toString();
+					String str2 = totalprice.substring(5, yesBtn.getText()
+							.toString().length() - 2);// 获得所有菜品总价
+					Intent intent = new Intent();
+					intent.putExtra("totalID", str);//所有菜品ID字符串
+					intent.putExtra("totalPrice", str2);//所有菜品总价
+					intent.putExtra("totalDishNum", String.valueOf(totaldish));//菜品总个数
+					intent.setClass(OrderDishActivity.this,
+							RestaurantDetailActivity.class);					
+					AlertDialog.Builder builder2 = new AlertDialog.Builder(
+							OrderDishActivity.this);
+					builder2.setMessage(str2);
+					builder2.show();
+					OrderDishActivity.this.setResult(RESULT_OK, intent);
+					OrderDishActivity.this.finish();
 				}
-
-				string = sb.toString();
-				// string.su
-				String str = string.substring(1, string.length());// 菜品ID
-				String totalprice = new String();
-				totalprice = yesBtn.getText().toString();
-				String str2 = totalprice.substring(5, yesBtn.getText()
-						.toString().length() - 2);// 菜品总价
-				Intent intent = new Intent();
-				intent.putExtra("totalID", str);
-				intent.putExtra("totalPrice", str2);
-				intent.putExtra("totalDish", String.valueOf(totaldish));
-				intent.setClass(OrderDishActivity.this,
-						RestaurantDetailActivity.class);
-
-				// startActivity(intent);
-
-				AlertDialog.Builder builder2 = new AlertDialog.Builder(
-						OrderDishActivity.this);
-				builder2.setMessage(str2);
-				builder2.show();
-				OrderDishActivity.this.setResult(RESULT_OK, intent);
-				OrderDishActivity.this.finish();
-				// }
 
 			}
 		});
