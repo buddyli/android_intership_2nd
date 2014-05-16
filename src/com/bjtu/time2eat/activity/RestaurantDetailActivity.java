@@ -2,13 +2,15 @@ package com.bjtu.time2eat.activity;
 
 import java.util.Calendar;
 
-import android.R.integer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -82,7 +84,6 @@ public class RestaurantDetailActivity extends Activity {
 			}
 		});
 		phone.setOnClickListener(new View.OnClickListener() {
-			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				phone.setText("");
 			}
@@ -101,21 +102,10 @@ public class RestaurantDetailActivity extends Activity {
 
 				} else {
 					try {
-						Response<RestaurantOrder> response = resService
-								.restaurantOrder(restID.getText().toString(),
-										phone.getText().toString(), totalID.getText().toString(),
-										date.getText().toString(), time
-												.getText().toString());
-						String statusString = null;
-						// if (response != null && response.getStatus() != null)
-						// {
-						statusString = response.getStatus().getMessage();
-						// }
-						Toast.makeText(getApplicationContext(), statusString,
-								Toast.LENGTH_LONG).show();
-
+						// TODO 用餐人数，这里需要根据用户的输入修改
+						new Thread(runnable).start();
 					} catch (Exception e) {
-						
+
 					}
 
 				}
@@ -136,8 +126,9 @@ public class RestaurantDetailActivity extends Activity {
 			case RESULT_OK:
 				totalID.setText(data.getStringExtra("totalID"));
 				totalPrice.setText(data.getStringExtra("totalPrice"));
-				orderDishButton.setText("已点"+data.getStringExtra("totalDish")+"道菜共"+data.getStringExtra("totalPrice")+"元");
-				
+				orderDishButton.setText("已点" + data.getStringExtra("totalDish")
+						+ "道菜共" + data.getStringExtra("totalPrice") + "元");
+
 				// Toast.makeText(this, data.getStringExtra("totalID"),
 				// Toast.LENGTH_LONG).show();
 				break;
@@ -195,4 +186,46 @@ public class RestaurantDetailActivity extends Activity {
 		startActivityForResult(intent, OTHER);
 	}
 
+	@SuppressLint("HandlerLeak")
+	Handler handler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			int status = msg.getData().getInt("status");
+			if (status == 0) {
+				Toast.makeText(RestaurantDetailActivity.this, "预订成功！",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(RestaurantDetailActivity.this,
+						"网络繁忙，预订失败，请重新预订！", Toast.LENGTH_SHORT).show();
+			}
+
+			// TODO，这里可以跳转到订单历史记录页面。
+		}
+
+	};
+	Runnable runnable = new Runnable() {
+
+		@Override
+		public void run() {
+			int num = 1;
+
+			Response<RestaurantOrder> response = resService.restaurantOrder(
+					restID.getText().toString(), phone.getText().toString(),
+					totalID.getText().toString(), date.getText().toString(),
+					time.getText().toString(), num);
+			// String statusString = null;
+			// statusString = response.getStatus().getMessage();
+			Message msg = new Message();
+			Bundle bundle = new Bundle();
+			if (response == null) {
+				bundle.putInt("status", 1);
+			} else {
+				bundle.putInt("status", response.getStatus().getCode());
+			}
+			msg.setData(bundle);
+			handler.sendMessage(msg);
+		}
+	};
 }

@@ -61,9 +61,7 @@ public class RestaurantService {
 		params.put("id", id);
 
 		try {
-			String json = HttpUtils
-					.fetchResponseByGet(action,
-							params, "UTF-8");
+			String json = HttpUtils.fetchResponseByGet(action, params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantDetail>>() {
 			}.getType();
@@ -90,9 +88,7 @@ public class RestaurantService {
 		params.put("id", id);
 
 		try {
-			String json = HttpUtils
-					.fetchResponseByGet(action,
-							params, "UTF-8");
+			String json = HttpUtils.fetchResponseByGet(action, params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantMenu>>() {
 			}.getType();
@@ -116,10 +112,12 @@ public class RestaurantService {
 	 *            以英文半角逗号分隔的菜单ID
 	 * @param date
 	 * @param time
+	 * @param num
+	 *            用餐人数，默认1
 	 * @return
 	 */
 	public Response<RestaurantOrder> restaurantOrder(String id, String mobile,
-			String foods, String date, String time) {
+			String foods, String date, String time, int num) {
 		String action = "restaurant_order";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", id);
@@ -127,11 +125,13 @@ public class RestaurantService {
 		params.put("foods", foods);
 		params.put("date", date);
 		params.put("time", time);
+		if (num <= 0) {
+			num = 1;
+		}
+		params.put("num", String.valueOf(num));
 
 		try {
-			String json = HttpUtils
-					.fetchResponseByGet(action,
-							params, "UTF-8");
+			String json = HttpUtils.fetchResponseByGet(action, params, "UTF-8");
 
 			Type type = new TypeToken<Response<RestaurantOrder>>() {
 			}.getType();

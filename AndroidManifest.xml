@@ -100,8 +100,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bjtu.time2eat.activity.MapActivity"
-            android:label="@string/my_location" >
+            android:name="com.bjtu.time2eat.activity.OrderDishActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.bjtu.time2eat.activity.LocationOverlayActivity"
