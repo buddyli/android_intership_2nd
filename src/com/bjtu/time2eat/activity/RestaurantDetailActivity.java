@@ -2,7 +2,6 @@ package com.bjtu.time2eat.activity;
 
 import java.util.Calendar;
 
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -31,6 +30,7 @@ import com.example.time2eat.R;
  * @author LiuBao 商户详情
  * 
  */
+@SuppressLint("HandlerLeak")
 public class RestaurantDetailActivity extends Activity {
 	private Calendar c;
 	private EditText date; // 就餐日期

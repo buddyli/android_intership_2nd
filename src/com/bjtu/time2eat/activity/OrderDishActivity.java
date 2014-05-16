@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bjtu.time2eat.pojo.Menu;
@@ -80,7 +79,6 @@ public class OrderDishActivity extends ListActivity {
 					mChecked.set(arg2, true);
 					yesimage = (ImageView) arg1.findViewById(R.id.yesimage);
 					yesimage.setImageResource(R.drawable.yeschoose);
-					TextView t1 = (TextView) arg1.findViewById(R.id.dishprice);
 					// Toast.makeText(getApplicationContext(),
 					// t1.getText().toString(), Toast.LENGTH_SHORT).show();
 					for (int i = 0; i < mChecked.size(); i++) {
