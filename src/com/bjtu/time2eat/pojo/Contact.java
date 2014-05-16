@@ -16,6 +16,7 @@ public class Contact {
 	private int selected = 0;
 	private String formattedNumber;
 	private String pinyin;
+	public Boolean isChecked;
 
 	public int getContactId() {
 		return contactId;
@@ -87,6 +88,14 @@ public class Contact {
 
 	public void setPinyin(String pinyin) {
 		this.pinyin = pinyin;
+	}
+	
+	public Boolean getIsChecked() {
+		return isChecked;
+	}
+
+	public void setIsChecked(Boolean isChecked) {
+		this.isChecked = isChecked;
 	}
 
 }
