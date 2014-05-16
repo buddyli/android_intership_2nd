@@ -1,15 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" 
     android:gravity="center"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp" >
 
     <ImageView
         android:id="@+id/res_image"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="4.4"
         android:background="@drawable/ic_category_dining_normal"
         android:contentDescription="@string/res_icon"
         android:scaleType="centerInside" />
@@ -17,12 +18,15 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1.1"
         android:orientation="vertical" >
 
-     <!--    <TextView
+        <!--
+             <TextView
             android:id="@+id/restaurantid"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" /> -->
+            android:layout_height="wrap_content" />
+        -->
 
         <TextView
             android:id="@+id/restaurantname"
@@ -37,7 +41,7 @@
             android:drawableLeft="@drawable/result_list_item_address" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
@@ -51,9 +55,18 @@
                 android:id="@+id/restaurantprice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/result_list_item_price"
-                android:layout_marginLeft="5dip" />
+                android:layout_marginLeft="5dip"
+                android:drawableLeft="@drawable/result_list_item_price" />
         </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/more_image"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:background="@drawable/more"
+        android:contentDescription="@string/res_icon"
+        android:scaleType="centerInside" />
 
 </LinearLayout>

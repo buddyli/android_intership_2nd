@@ -28,13 +28,16 @@ public class MainActivity extends Activity {
 		Intent intent2 = new Intent(this, LocationOverlayActivity.class);
 		// Intent intent2 = new Intent(this, MyLocationActivity.class);
 		Intent intent3 = new Intent(this, UserActivity.class);
+		Intent intent4 = new Intent(this, SettingActivity.class);
 		// Intent intent4=new Intent(this, RestaurantListActivity.class);
-		tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("", getResources().getDrawable(R.drawable.home))
+		tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("")
 				.setContent(intent1));
-		tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("", getResources().getDrawable(R.drawable.map))
+		tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("")
 				.setContent(intent2));
-		tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("", getResources().getDrawable(R.drawable.user))
+		tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("")
 				.setContent(intent3));
+		tabHost.addTab(tabHost.newTabSpec("tab4").setIndicator("")
+				.setContent(intent4));/*	*/
 		// tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("更多").setContent(intent4));
 		// tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("更多",
 		// getResources().getDrawable(R.drawable.image3)).setContent(intent3));
