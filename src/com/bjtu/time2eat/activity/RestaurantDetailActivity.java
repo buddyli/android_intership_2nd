@@ -54,7 +54,7 @@ public class RestaurantDetailActivity extends Activity {
 
 		yesorderButton = (Button) findViewById(R.id.yesOrderBtn);
 		orderDishButton = (Button) findViewById(R.id.orderDishBtn);
-		//restID = (TextView) findViewById(R.id.showRestID);
+		// restID = (TextView) findViewById(R.id.showRestID);
 		totalID = (TextView) findViewById(R.id.totalID);
 		totalPrice = (TextView) findViewById(R.id.totalPrice);
 		date = (EditText) findViewById(R.id.date);
@@ -67,7 +67,7 @@ public class RestaurantDetailActivity extends Activity {
 		// phone.setFocusable(false);
 		// 从商户列表获得商户的信息
 		Intent intent = getIntent();
-		restID=intent.getStringExtra("id");
+		restID = intent.getStringExtra("id");
 		TextView restName = (TextView) findViewById(R.id.showRestName);
 		restName.setText(intent.getStringExtra("name"));
 		TextView restAddress = (TextView) findViewById(R.id.showRestAddress);
@@ -75,7 +75,13 @@ public class RestaurantDetailActivity extends Activity {
 		TextView restTelno = (TextView) findViewById(R.id.showRestTelno);
 		restTelno.setText(intent.getStringExtra("telno"));
 		TextView restPrice = (TextView) findViewById(R.id.showRestPrice);
-		restPrice.setText(intent.getStringExtra("price" + "RMB"));
+		restPrice.setText(intent.getStringExtra("distance" + "米"));
+		// TextView restStar = (TextView) findViewById(R.id.star);
+		restPrice.setText(intent.getStringExtra("star"));
+		// TextView restDistance = (TextView) findViewById(R.id.showRestDis);
+		restPrice.setText(intent.getStringExtra("distance"));
+		// TextView restTradeName = (TextView) findViewById(R.id.trade_name);
+		restPrice.setText(intent.getStringExtra("trade_name"));
 		// intent.getExtras()
 
 		date.setOnClickListener(new View.OnClickListener() {// 日期对话框
@@ -233,9 +239,9 @@ public class RestaurantDetailActivity extends Activity {
 			}
 
 			Response<RestaurantOrder> response = resService.restaurantOrder(
-					restID, phone.getText().toString(),
-					totalID.getText().toString(), date.getText().toString(),
-					time.getText().toString(), peoplen);
+					restID, phone.getText().toString(), totalID.getText()
+							.toString(), date.getText().toString(), time
+							.getText().toString(), peoplen);
 			// String statusString = null;
 			// statusString = response.getStatus().getMessage();
 			Message msg = new Message();

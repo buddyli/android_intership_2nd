@@ -64,6 +64,12 @@ public class RestaurantListActivity extends ListActivity {
 						.toString());
 				intent.putExtra("telno", list.get(position).get("telno")
 						.toString());
+				intent.putExtra("diatance", list.get(position).get("diatance")
+						.toString());
+				intent.putExtra("star", list.get(position).get("star")
+						.toString());
+				intent.putExtra("trade_name", list.get(position).get("trade_name")
+						.toString());
 				startActivity(intent);
 				// Toast.makeText(getApplicationContext(), "211212",
 				// Toast.LENGTH_SHORT).show();
@@ -122,6 +128,10 @@ public class RestaurantListActivity extends ListActivity {
 				map.put("address", restInfo[2]);
 				map.put("telno", restInfo[3]);
 				map.put("price", restInfo[4]);
+				map.put("distance", restInfo[5]);
+				map.put("star", restInfo[6]);
+				map.put("trade_name", restInfo[7]);/**/
+
 				//
 				list.add(map);
 			}/**/
@@ -171,7 +181,26 @@ public class RestaurantListActivity extends ListActivity {
 					}
 
 					if (StringUtils.isNotBlank(merchant.getPrice())) {
-						item.append(merchant.getPrice());
+						item.append(merchant.getPrice()).append("|");
+					} else {
+						item.append("--").append("|");
+						;
+					}
+
+					if (StringUtils.isNotBlank(merchant.getDistance())) {
+						item.append(merchant.getDistance()).append("|");
+					} else {
+						item.append("--").append("|");
+						;
+					}
+					if (StringUtils.isNotBlank(merchant.getM_star())) {
+						item.append(merchant.getM_star()).append("|");
+					} else {
+						item.append("--").append("|");
+						;
+					}
+					if (StringUtils.isNotBlank(merchant.getTrade_name())) {
+						item.append(merchant.getTrade_name());
 					} else {
 						item.append("--");
 					}
