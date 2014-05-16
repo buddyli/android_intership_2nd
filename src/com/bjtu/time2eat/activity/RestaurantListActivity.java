@@ -24,7 +24,11 @@ import com.bjtu.time2eat.pojo.Response;
 import com.bjtu.time2eat.pojo.resbody.RestaurantList;
 import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
-
+/**
+ * 
+ * @author LiuBao 商户列表
+ *
+ */
 @SuppressLint("HandlerLeak") public class RestaurantListActivity extends ListActivity {
 
 	private String [] restInfo;

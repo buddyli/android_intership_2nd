@@ -225,23 +225,13 @@ public class RestaurantDetailActivity extends Activity {
 
 		@Override
 		public void run() {
-			// int num = 1;
 
 			int peoplen = Integer.parseInt(peoplenum.getText().toString());
-						
-			Toast.makeText(RestaurantDetailActivity.this,
-					peoplenum.getText().toString(), Toast.LENGTH_LONG).show();
-			
-			if (peoplen < 1) {
-				peoplen = 1;
-			} else {
-				if (peoplen > 200) {
-					peoplen = 200;
-					Toast.makeText(RestaurantDetailActivity.this,
-							"对不起，我们这没那么大的地儿", Toast.LENGTH_LONG).show();
-				}
 
+			if (peoplen > 200) {
+				peoplen = 200;
 			}
+
 			Response<RestaurantOrder> response = resService.restaurantOrder(
 					restID.getText().toString(), phone.getText().toString(),
 					totalID.getText().toString(), date.getText().toString(),
