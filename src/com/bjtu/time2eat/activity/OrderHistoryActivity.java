@@ -49,10 +49,11 @@ public class OrderHistoryActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		initLoadingDialog();
 		// 加载用户预订历史记录
-		mobile = getIntent().getStringExtra("mobile");
-		if (StringUtils.isBlank(mobile)) {
+		Intent intent=getIntent();
+		mobile = intent.getStringExtra("mobile");
+		/*if (StringUtils.isBlank(mobile)) {
 			mobile = "15210078395";
-		}
+		}*/
 		
 		this.getListView().setOnItemClickListener(new OnItemClickListener() {        	
         	public void onItemClick(AdapterView<?> adapterView, View view,
@@ -62,6 +63,9 @@ public class OrderHistoryActivity extends ListActivity {
 				 intent.putExtra("id", list.get(position).get("orderid").toString());
 				 intent.putExtra("orders", list.get(position).get("orders").toString());	
 				 intent.putExtra("totalprice", list.get(position).get("cost").toString());
+				 intent.putExtra("merchantname", list.get(position).get("name").toString());
+				 intent.putExtra("personnum", list.get(position).get("num").toString());
+				 intent.putExtra("Restaurant_id", list.get(position).get("Restaurant_id").toString());
 				 startActivity(intent);
         		//Toast.makeText(getApplicationContext(), "211212", Toast.LENGTH_SHORT).show();
 
@@ -124,6 +128,8 @@ public class OrderHistoryActivity extends ListActivity {
 				map.put("status", orders[3]);
 				map.put("orderid", orders[4]);
 				map.put("orders", orders[5]);
+				map.put("num", orders[6]);
+				map.put("Restaurant_id", orders[7]);
 				list.add(map);
 			}
 			SimpleAdapter adapter = new SimpleAdapter(OrderHistoryActivity.this,list, R.layout.order_history,
@@ -151,7 +157,8 @@ public class OrderHistoryActivity extends ListActivity {
 						.size()];
 				int i = 0;
 				for (Order order : list.getData().getHistory()) {
-					orders[i++] = order.getDatetime()+"|"+order.getName()+"|"+order.getCost()+"|"+order.getStatus()+"|"+order.getId()+"|"+order.getOrdered();
+					orders[i++] = order.getDatetime()+"|"+order.getName()+"|"+order.getCost()
+								  +"|"+order.getStatus()+"|"+order.getId()+"|"+order.getOrdered()+"|"+order.getNum()+"|"+order.getRestaurant_id();
 				}
 				bundle.putCharSequenceArray("orders", orders);
 				msg.setData(bundle);
