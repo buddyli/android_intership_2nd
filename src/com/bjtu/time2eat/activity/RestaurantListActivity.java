@@ -1,10 +1,11 @@
 package com.bjtu.time2eat.activity;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
@@ -24,45 +25,54 @@ import com.bjtu.time2eat.pojo.Response;
 import com.bjtu.time2eat.pojo.resbody.RestaurantList;
 import com.bjtu.time2eat.service.RestaurantService;
 import com.example.time2eat.R;
+
 /**
  * 
  * @author LiuBao 商户列表
- *
+ * 
  */
-@SuppressLint("HandlerLeak") public class RestaurantListActivity extends ListActivity {
+@SuppressLint("HandlerLeak")
+public class RestaurantListActivity extends ListActivity {
 
-	private String [] restInfo;
+	private String[] restInfo;
 	private ProgressDialog m_pDialog;
 	private List<Map<String, Object>> list = null;
 	private RestaurantService resService = new RestaurantService();
-	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); 
-        initLoadingDialog();
-        this.getListView().setOnItemClickListener(new OnItemClickListener() {        	
-        	public void onItemClick(AdapterView<?> adapterView, View view,
-					int position, long id) {        		
-				 Intent intent = new Intent();
-				 intent.setClass(RestaurantListActivity.this, RestaurantDetailActivity.class);		
-//				 intent.putExtra("id", restInfo[0]);
-//				 intent.putExtra("name",restInfo[1]);
-//				 intent.putExtra("address",restInfo[2]);
-//				 intent.putExtra("telno",restInfo[3]);	
-//				 intent.putExtra("price",restInfo[4]);			    
 
-				 intent.putExtra("id", list.get(position).get("id").toString());
-				 intent.putExtra("name", list.get(position).get("name").toString());
-				 intent.putExtra("address", list.get(position).get("address").toString());
-				 intent.putExtra("price", list.get(position).get("price").toString());
-				 intent.putExtra("telno", list.get(position).get("telno").toString());				 
-				 startActivity(intent);
-        		//Toast.makeText(getApplicationContext(), "211212", Toast.LENGTH_SHORT).show();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		initLoadingDialog();
+		this.getListView().setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				Intent intent = new Intent();
+				intent.setClass(RestaurantListActivity.this,
+						RestaurantDetailActivity.class);
+				// intent.putExtra("id", restInfo[0]);
+				// intent.putExtra("name",restInfo[1]);
+				// intent.putExtra("address",restInfo[2]);
+				// intent.putExtra("telno",restInfo[3]);
+				// intent.putExtra("price",restInfo[4]);
+
+				intent.putExtra("id", list.get(position).get("id").toString());
+				intent.putExtra("name", list.get(position).get("name")
+						.toString());
+				intent.putExtra("address", list.get(position).get("address")
+						.toString());
+				intent.putExtra("price", list.get(position).get("price")
+						.toString());
+				intent.putExtra("telno", list.get(position).get("telno")
+						.toString());
+				startActivity(intent);
+				// Toast.makeText(getApplicationContext(), "211212",
+				// Toast.LENGTH_SHORT).show();
 
 			}
 		});
-		new Thread(runnable).start();      
-    }    
-	
+		new Thread(runnable).start();
+	}
+
 	@SuppressWarnings("deprecation")
 	private void initLoadingDialog() {
 		// 创建ProgressDialog对象
@@ -89,38 +99,41 @@ import com.example.time2eat.R;
 		// 让ProgressDialog显示
 		m_pDialog.show();
 	}
-	
+
 	@SuppressLint("HandlerLeak")
 	Handler hander = new Handler() {
-		@SuppressLint("HandlerLeak") @Override
-		public void handleMessage(Message msg){
+		@SuppressLint("HandlerLeak")
+		@Override
+		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			if (m_pDialog != null) {
 				m_pDialog.hide();
 			}
-			Bundle bundle = msg.getData();			
-			String[] txt = (String[]) bundle.get("merchants");			
-			list=new ArrayList<Map<String,Object>>();
-			
-			for (int i = 0; i < txt.length; i++) {	
-				restInfo=txt[i].split("\\|");//将获得的字符串
+			Bundle bundle = msg.getData();
+			String[] txt = (String[]) bundle.get("merchants");
+			list = new ArrayList<Map<String, Object>>();
+
+			for (int i = 0; i < txt.length; i++) {
+				restInfo = txt[i].split("\\|");// 将获得的字符串
 				Map<String, Object> map = new HashMap<String, Object>();
-				map = new HashMap<String, Object>();				
-				map.put("id",restInfo[0]);
+				map = new HashMap<String, Object>();
+				map.put("id", restInfo[0]);
 				map.put("name", restInfo[1]);
 				map.put("address", restInfo[2]);
-				map.put("telno",restInfo[3]);
+				map.put("telno", restInfo[3]);
 				map.put("price", restInfo[4]);
-    		//
+				//
 				list.add(map);
 			}/**/
-			//for (int i = 0; i < txt.length; i++) {	
-				//restInfo=txt[i].split("*");			
-			
-			SimpleAdapter adapter = new SimpleAdapter(RestaurantListActivity.this,list, R.layout.restlistitem,
-					new String[] {"name","address","telno","price"},
-					new int[] { R.id.restaurantname,R.id.restaurantaddress,R.id.restauranttelno,R.id.restaurantprice});
-			setListAdapter(adapter);		
+			// for (int i = 0; i < txt.length; i++) {
+			// restInfo=txt[i].split("*");
+
+			SimpleAdapter adapter = new SimpleAdapter(
+					RestaurantListActivity.this, list, R.layout.restlistitem,
+					new String[] { "name", "address", "telno", "price" },
+					new int[] { R.id.restaurantname, R.id.restaurantaddress,
+							R.id.restauranttelno, R.id.restaurantprice });
+			setListAdapter(adapter);
 		}
 	};
 
@@ -137,11 +150,33 @@ import com.example.time2eat.R;
 						.size()];
 				int i = 0;
 				for (Merchant merchant : list.getData().getResult()) {
-					merchants[i++] = merchant.getId()+"|"+
-				"商户名称："+merchant.getName()+"|"+
-				"商户地址："+merchant.getAddress()+"|"+
-				"联系电话："+merchant.getTelno()+"|"+
-				"人均消费："+merchant.getPrice();
+					// merchants[i++] = merchant.getId()+"|"+
+					// "商户名称："+merchant.getName()+"|"+
+					// "商户地址："+merchant.getAddress()+"|"+
+					// "联系电话："+merchant.getTelno()+"|"+
+					// "人均消费："+merchant.getPrice();
+					StringBuilder item = new StringBuilder();
+					item.append(merchant.getId()).append("|");
+					item.append(merchant.getName()).append("|");
+					if (StringUtils.isNotBlank(merchant.getAddress())) {
+						item.append(merchant.getAddress()).append("|");
+					} else {
+						item.append("--").append("|");
+					}
+
+					if (StringUtils.isNotBlank(merchant.getTelno())) {
+						item.append(merchant.getTelno()).append("|");
+					} else {
+						item.append("--").append("|");
+					}
+
+					if (StringUtils.isNotBlank(merchant.getPrice())) {
+						item.append(merchant.getPrice());
+					} else {
+						item.append("--");
+					}
+
+					merchants[i++] = item.toString();
 				}
 				bundle.putCharSequenceArray("merchants", merchants);
 				msg.setData(bundle);
@@ -149,5 +184,5 @@ import com.example.time2eat.R;
 			hander.sendMessage(msg);
 		}
 	};
-       
+
 }

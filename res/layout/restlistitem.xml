@@ -1,27 +1,59 @@
-<LinearLayout  
-   xmlns:android="http://schemas.android.com/apk/res/android"  
-  android:layout_width="fill_parent"  
-  android:layout_height="fill_parent"  
-  android:orientation="vertical">  
-	<TextView  
-        android:id="@+id/restaurantid"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" />  
-    <TextView  
-        android:id="@+id/restaurantname"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" 
-        android:textSize="20sp"/>  
-    <TextView  
-        android:id="@+id/restaurantaddress"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" />  
-    <TextView  
-        android:id="@+id/restauranttelno"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" />  
-    <TextView  
-        android:id="@+id/restaurantprice"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content" />  
-</LinearLayout> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" 
+    android:gravity="center"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/res_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_category_dining_normal"
+        android:contentDescription="@string/res_icon"
+        android:scaleType="centerInside" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+     <!--    <TextView
+            android:id="@+id/restaurantid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" /> -->
+
+        <TextView
+            android:id="@+id/restaurantname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/restaurantaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/result_list_item_address" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/restauranttelno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/result_list_item_phone" />
+
+            <TextView
+                android:id="@+id/restaurantprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/result_list_item_price"
+                android:layout_marginLeft="5dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
