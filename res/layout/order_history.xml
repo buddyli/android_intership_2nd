@@ -1,40 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-    <LinearLayout android:orientation="vertical"
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="15sp"
-		android:layout_marginTop="10sp">
-		<TextView android:id="@+id/datetime" 
-		    android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:textColor="#7B7B7B"
-			android:textSize="12sp" />
-		
-		<TextView android:id="@+id/name" 
-		    android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:textColor="#000000"
-			android:textSize="20sp" />
-		
-		<TextView android:id="@+id/cost" 
-		    android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:textColor="#000000"
-			android:textSize="18sp" />
+    android:layout_height="match_parent" >
 
-	</LinearLayout>
-    <TextView android:id="@+id/status" 
-		    android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:textColor="#F75000"
-			android:gravity="center"
-			android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-			android:layout_marginRight="15sp"
-			android:textSize="15sp" />
+    <ImageView
+        android:id="@+id/res_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_category_dining_normal"
+        android:contentDescription="@string/res_icon"
+        android:scaleType="centerInside" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="70sp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7B7B7B"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/result_list_item_price"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25sp"
+        android:gravity="center"
+        android:textColor="#F75000"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/more_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/more"
+        android:contentDescription="@string/res_icon"
+        android:scaleType="centerInside" />
 
 </RelativeLayout>
