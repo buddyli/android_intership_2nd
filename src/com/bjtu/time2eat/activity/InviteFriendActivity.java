@@ -98,7 +98,7 @@ public class InviteFriendActivity extends Activity{
 				StringBuffer nameEvery = new StringBuffer();
 				for(int j=0;j<phoneNum.size();j++){
 					numberEvery = numberEvery.append(phoneNum.get(j)+",");
-					nameEvery = nameEvery.append(phoneName+",");
+					nameEvery = nameEvery.append(phoneName.get(j)+",");
 				}
 				Uri uri = Uri.parse("smsto:"+numberEvery.toString());  
 				Intent it = new Intent(Intent.ACTION_SENDTO, uri);
