@@ -122,7 +122,7 @@ public class OrderHistoryActivity extends ListActivity {
 				map = new HashMap<String, Object>();				
 				map.put("datetime",orders[0]);
 				map.put("name", orders[1]);
-				map.put("cost", "￥"+orders[2]);
+				map.put("cost", orders[2]);
 				map.put("status", orders[3]);
 				map.put("orderid", orders[4]);
 				map.put("orders", orders[5]);
