@@ -50,19 +50,19 @@ public class RestaurantDetailActivity extends Activity {
 	private EditText phone;// 用户手机
 	private EditText peoplenum;// 就餐人数
 	private String restID;// 餐馆ID
-	private String totalID="";// 订菜的总ID
+	private String totalID = "";// 订菜的总ID
 	private String lat;// 餐馆纬度
 	private String lon;// 餐馆经度
 	private TextView totalName;// 订菜的总菜名
 	private TextView totalPrice;// 订菜的总价
 	private TextView restName;
-	private TextView notice;//提醒用户
+	private TextView notice;// 提醒用户
 	// private TextView restAddress;
 	private Button yesorderButton;
 	private Button orderDishButton;
 	private Button inviteFriends;
 	private Button restTelno;
-	private Button restAddress;
+	private TextView restAddress;
 	private CheckBox rem_pw;
 	private SharedPreferences sp;
 	private static final int OTHER = 1;
@@ -79,6 +79,7 @@ public class RestaurantDetailActivity extends Activity {
 		yesorderButton = (Button) findViewById(R.id.yesOrderBtn);
 		orderDishButton = (Button) findViewById(R.id.orderDishBtn);
 		inviteFriends = (Button) findViewById(R.id.inviteFriends);
+
 		// restID = (TextView) findViewById(R.id.showRestID);
 		totalName = (TextView) findViewById(R.id.totalName);
 		totalPrice = (TextView) findViewById(R.id.totalPrice);
@@ -98,7 +99,7 @@ public class RestaurantDetailActivity extends Activity {
 		restID = intent.getStringExtra("id");
 		restName = (TextView) findViewById(R.id.showRestName);
 		restName.setText(intent.getStringExtra("name"));
-		restAddress = (Button) findViewById(R.id.showRestAddress);
+		restAddress = (TextView) findViewById(R.id.showRestAddress);
 		restAddress.setText(intent.getStringExtra("address"));
 		restTelno = (Button) findViewById(R.id.showRestTelno);
 		restTelno.setText(intent.getStringExtra("telno"));
@@ -112,22 +113,22 @@ public class RestaurantDetailActivity extends Activity {
 		restTradeName.setText(intent.getStringExtra("trade_name"));
 		lat = intent.getStringExtra("lat");
 		lon = intent.getStringExtra("lon");
-		// intent.getExtras();
-		Time2EatApplication app = (Time2EatApplication) this.getApplication();
+		inviteFriends.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.button2));
 
-		restAddress.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.putExtra("restlat", lat);
-				intent.putExtra("restlon", lon);
-				//intent.setClass(RestaurantDetailActivity.this,
-					//	WalkToRestaurantActivity.class);
-				//startActivity(intent);
-			}
-		});
+		// restAddress.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// Intent intent = new Intent();
+		// intent.putExtra("restlat", lat);
+		// intent.putExtra("restlon", lon);
+		// //intent.setClass(RestaurantDetailActivity.this,
+		// // WalkToRestaurantActivity.class);
+		// //startActivity(intent);
+		// }
+		// });
 
 		date.setOnClickListener(new View.OnClickListener() {// 日期对话框
 			@SuppressWarnings("deprecation")
@@ -262,14 +263,12 @@ public class RestaurantDetailActivity extends Activity {
 			// 根据请求返回值得结果码 再进行匹配
 			switch (resultCode) {
 			case RESULT_OK:
-				if(data.getStringExtra("totalID").equals(""))
-						{
-							totalID="";
-						}
-				else {
+				if (data.getStringExtra("totalID").equals("")) {
+					totalID = "";
+				} else {
 					totalID = data.getStringExtra("totalID");
 				}
-				
+
 				totalName.setText("已点菜品：" + data.getStringExtra("totalName"));
 				totalPrice.setText("共计：" + data.getStringExtra("totalPrice")
 						+ "元");
@@ -277,7 +276,6 @@ public class RestaurantDetailActivity extends Activity {
 						+ data.getStringExtra("totalDishNum") + "道菜共"
 						+ data.getStringExtra("totalPrice") + "元");
 
-				
 				break;
 
 			default:
@@ -441,27 +439,36 @@ public class RestaurantDetailActivity extends Activity {
 				else if (SettingActivity.option == false) {
 					// Toast.makeText(RestaurantDetailActivity.this,"a为false!",Toast.LENGTH_LONG).show();
 				}
+				inviteFriends.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.button));
 				// 邀请好友
 				inviteFriends.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						String s = new String();
-						s = date.getText().toString();
-						String t = new String();
-						t = time.getText().toString();
-						Uri smsToUri = Uri.parse("smsto:");
-						Intent intent = new Intent(Intent.ACTION_SENDTO,
-								smsToUri);
-						Toast.makeText(RestaurantDetailActivity.this,
-								"您现在可以邀请好友!", Toast.LENGTH_LONG).show();
-						setResult(RESULT_OK);
-						intent.putExtra("sms_body", "我在"
-								+ restName.getText().toString() + "（"
-								+ restAddress.getText().toString() + "）"
-								+ " 定了餐！  时间是：" + s + "  " + t
-								+ " 请你去吃饭哦！亲！敞开了吃！");
+						Intent intent = new Intent(RestaurantDetailActivity.this, InviteFriendActivity.class);
+						intent.putExtra("restname", restName.getText().toString());
+						intent.putExtra("restaddress", restAddress.getText().toString());
+						intent.putExtra("date", date.getText().toString());
+						intent.putExtra("time", time.getText().toString());
 						startActivity(intent);
+
+//						String s = new String();
+//						s = date.getText().toString();
+//						String t = new String();
+//						t = time.getText().toString();
+//						Uri smsToUri = Uri.parse("smsto:");
+//						Intent intent = new Intent(Intent.ACTION_SENDTO,
+//								smsToUri);
+//						Toast.makeText(RestaurantDetailActivity.this,
+//								"您现在可以邀请好友!", Toast.LENGTH_LONG).show();
+//						setResult(RESULT_OK);
+//						intent.putExtra("sms_body", "我在"
+//								+ restName.getText().toString() + "（"
+//								+ restAddress.getText().toString() + "）"
+//								+ " 定了餐！  时间是：" + s + "  " + t
+//								+ " 请你去吃饭哦！亲！敞开了吃！");
+//						startActivity(intent);
 					}
 				});
 
