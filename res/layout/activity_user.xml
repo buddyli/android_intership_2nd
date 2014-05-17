@@ -37,12 +37,14 @@
         android:id="@+id/btn_my_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="我的订单" />
+        android:text="我的订单" 
+        android:background="@drawable/button" />
 
     <Button
         android:id="@+id/btn_invite_friend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="邀请好友" />
+        android:text="邀请好友" 
+        android:background="@drawable/button" />
 
 </LinearLayout>
