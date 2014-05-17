@@ -123,9 +123,9 @@ public class RestaurantDetailActivity extends Activity {
 				Intent intent = new Intent();
 				intent.putExtra("restlat", lat);
 				intent.putExtra("restlon", lon);
-				intent.setClass(RestaurantDetailActivity.this,
-						WalkToRestaurantActivity.class);
-				startActivity(intent);
+				//intent.setClass(RestaurantDetailActivity.this,
+					//	WalkToRestaurantActivity.class);
+				//startActivity(intent);
 			}
 		});
 
