@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.bjtu.time2eat.pojo.Merchant;
 import com.bjtu.time2eat.pojo.Response;
@@ -49,7 +50,7 @@ public class RestaurantListActivity extends ListActivity {
 				Intent intent = new Intent();
 				intent.setClass(RestaurantListActivity.this,
 						RestaurantDetailActivity.class);
-				
+
 				intent.putExtra("id", list.get(position).get("id").toString());
 				intent.putExtra("name", list.get(position).get("name")
 						.toString());
@@ -63,7 +64,10 @@ public class RestaurantListActivity extends ListActivity {
 						.toString());
 				intent.putExtra("star", list.get(position).get("star")
 						.toString());
-				intent.putExtra("trade_name", list.get(position).get("trade_name")
+				intent.putExtra("trade_name",
+						list.get(position).get("trade_name").toString());
+				intent.putExtra("lat", list.get(position).get("lat").toString());
+				intent.putExtra("lon", list.get(position).get("lon")
 						.toString());
 				startActivity(intent);
 				// Toast.makeText(getApplicationContext(), "211212",
@@ -125,13 +129,11 @@ public class RestaurantListActivity extends ListActivity {
 				map.put("price", restInfo[4]);
 				map.put("distance", restInfo[5]);
 				map.put("star", restInfo[6]);
-				map.put("trade_name", restInfo[7]);/**/
-
-				//
+				map.put("trade_name", restInfo[7]);
+				map.put("lat", restInfo[8]);
+				map.put("lon", restInfo[9]);
 				list.add(map);
-			}/**/
-			// for (int i = 0; i < txt.length; i++) {
-			// restInfo=txt[i].split("*");
+			}
 
 			SimpleAdapter adapter = new SimpleAdapter(
 					RestaurantListActivity.this, list, R.layout.restlistitem,
@@ -139,6 +141,7 @@ public class RestaurantListActivity extends ListActivity {
 					new int[] { R.id.restaurantname, R.id.restaurantaddress,
 							R.id.restauranttelno, R.id.restaurantprice });
 			setListAdapter(adapter);
+
 		}
 	};
 
@@ -195,7 +198,19 @@ public class RestaurantListActivity extends ListActivity {
 						;
 					}
 					if (StringUtils.isNotBlank(merchant.getTrade_name())) {
-						item.append(merchant.getTrade_name());
+						item.append(merchant.getTrade_name()).append("|");
+					} else {
+						item.append("--").append("|");
+					}
+
+					if (StringUtils.isNotBlank(merchant.getLat())) {
+						item.append(merchant.getLat()).append("|");
+					} else {
+						item.append("--").append("|");
+					}
+
+					if (StringUtils.isNotBlank(merchant.getLon())) {
+						item.append(merchant.getLon());
 					} else {
 						item.append("--");
 					}
