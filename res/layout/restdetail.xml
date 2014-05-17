@@ -92,10 +92,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <TextView
+        <Button
             android:id="@+id/showRestTelno"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
             android:drawableLeft="@drawable/dianhua"
             android:textSize="30sp" />
     </LinearLayout>
@@ -133,15 +134,21 @@
             android:id="@+id/phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.9"
             android:inputType="phone"
             android:text="@string/phonenumber" />
+
+        <CheckBox
+            android:id="@+id/rem_pw"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
 
         <EditText
             android:id="@+id/peoplenum"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.6"
             android:inputType="number"
             android:text="@string/peoplenumber" />
     </LinearLayout>
@@ -169,23 +176,28 @@
             android:text="@string/yesorderBtn" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/inviteFriends"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:text="@string/inviteFriends" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/totalID"
+            android:id="@+id/totalName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/totalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textSize="20sp" />
     </LinearLayout>
 
