@@ -11,8 +11,11 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +25,9 @@ import android.provider.CalendarContract.Reminders;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,15 +52,23 @@ public class RestaurantDetailActivity extends Activity {
 	private EditText phone;// 用户手机
 	private EditText peoplenum;// 就餐人数
 	private String restID;// 餐馆ID
-	private TextView totalID;// 订菜的总ID
+	private String totalID;// 订菜的总ID
+	private TextView totalName;// 订菜的总菜名
 	private TextView totalPrice;// 订菜的总价
+	private TextView restName;
+	private TextView restAddress;
 	private Button yesorderButton;
 	private Button orderDishButton;
+	private Button inviteFriends;
+	private Button restTelno;
+	private CheckBox rem_pw;
+	private SharedPreferences sp;
 	private static final int OTHER = 1;
 	private final static int DATE_DIALOG = 0;
 	private final static int TIME_DIALOG = 1;
 	private RestaurantService resService = new RestaurantService();
 
+	@SuppressLint("WorldReadableFiles")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,35 +76,38 @@ public class RestaurantDetailActivity extends Activity {
 
 		yesorderButton = (Button) findViewById(R.id.yesOrderBtn);
 		orderDishButton = (Button) findViewById(R.id.orderDishBtn);
+		inviteFriends = (Button) findViewById(R.id.inviteFriends);
 		// restID = (TextView) findViewById(R.id.showRestID);
-		totalID = (TextView) findViewById(R.id.totalID);
+		totalName = (TextView) findViewById(R.id.totalName);
 		totalPrice = (TextView) findViewById(R.id.totalPrice);
 		date = (EditText) findViewById(R.id.date);
 		time = (EditText) findViewById(R.id.time);
 		phone = (EditText) findViewById(R.id.phone);
 		peoplenum = (EditText) findViewById(R.id.peoplenum);
+		rem_pw = (CheckBox) findViewById(R.id.rem_pw);
 
 		date.setFocusable(false);
 		time.setFocusable(false);
 		// phone.setFocusable(false);
 		// 从商户列表获得商户的信息
+		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		Intent intent = getIntent();
 		restID = intent.getStringExtra("id");
-		TextView restName = (TextView) findViewById(R.id.showRestName);
+		restName = (TextView) findViewById(R.id.showRestName);
 		restName.setText(intent.getStringExtra("name"));
-		TextView restAddress = (TextView) findViewById(R.id.showRestAddress);
+		restAddress = (TextView) findViewById(R.id.showRestAddress);
 		restAddress.setText(intent.getStringExtra("address"));
-		TextView restTelno = (TextView) findViewById(R.id.showRestTelno);
+		restTelno = (Button) findViewById(R.id.showRestTelno);
 		restTelno.setText(intent.getStringExtra("telno"));
 		TextView restPrice = (TextView) findViewById(R.id.showRestPrice);
 		restPrice.setText(intent.getStringExtra("price" + "元"));
 		TextView restStar = (TextView) findViewById(R.id.star);
 		restStar.setText(intent.getStringExtra("star"));
 		TextView restDistance = (TextView) findViewById(R.id.showRestDis);
-		restDistance.setText(intent.getStringExtra("distance"+"米"));
+		restDistance.setText(intent.getStringExtra("distance" + "米"));
 		TextView restTradeName = (TextView) findViewById(R.id.trade_name);
 		restTradeName.setText(intent.getStringExtra("trade_name"));
-		//intent.getExtras();
+		// intent.getExtras();
 
 		date.setOnClickListener(new View.OnClickListener() {// 日期对话框
 			@SuppressWarnings("deprecation")
@@ -106,6 +123,58 @@ public class RestaurantDetailActivity extends Activity {
 				showDialog(TIME_DIALOG);
 			}
 		});
+		phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				// TODO Auto-generated method stub
+				if (!hasFocus) {
+					rem_pw.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							if (rem_pw.isChecked()) {
+								// 记住用户名、密码、
+								Editor editor = sp.edit();
+								editor.putString("phone", phone.getText()
+										.toString());
+								editor.commit();
+								Toast.makeText(getApplicationContext(),
+										"已经记住手机号码", Toast.LENGTH_LONG).show();
+								sp.edit().putBoolean("ISCHECK", true).commit();
+
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"号码不能被记住", Toast.LENGTH_LONG).show();
+								sp.edit().putBoolean("ISCHECK", false).commit();
+
+							}
+
+						}
+					});
+
+					if (rem_pw.isChecked()) {
+						// 记住用户名、密码、
+						Editor editor = sp.edit();
+						editor.putString("phone", phone.getText().toString());
+						editor.commit();
+						Toast.makeText(getApplicationContext(), "已经记住手机号码",
+								Toast.LENGTH_LONG).show();
+						sp.edit().putBoolean("ISCHECK", true).commit();
+
+					} else {
+						Toast.makeText(getApplicationContext(), "号码不能被记住",
+								Toast.LENGTH_LONG).show();
+						sp.edit().putBoolean("ISCHECK", false).commit();
+
+					}
+
+				}
+
+			}
+		});
+
 		phone.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				phone.setText("");
@@ -114,6 +183,26 @@ public class RestaurantDetailActivity extends Activity {
 		peoplenum.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				peoplenum.setText("");
+			}
+		});
+		if (sp.getBoolean("ISCHECK", false)) {
+			// 设置默认是记录密码状态
+			rem_pw.setChecked(true);
+			phone.setText(sp.getString("phone", ""));
+
+		}
+		restTelno.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				Intent intent = new Intent();
+				intent.setAction("android.intent.action.DIAL");
+				intent.setData(Uri.parse("tel:"
+						+ restTelno.getText().toString()));
+				startActivity(intent);
+
 			}
 		});
 
@@ -127,83 +216,14 @@ public class RestaurantDetailActivity extends Activity {
 						|| peoplenum.getText().toString().equals("请输入就餐人数")
 						|| peoplenum.getText().toString().equals("")) {
 
-					
-					
 					Toast.makeText(getApplicationContext(), "请输入订餐信息",
 							Toast.LENGTH_SHORT).show();
-					
 
-					
 				} else {
 					try {
-						Builder messageBox=new  AlertDialog.Builder(RestaurantDetailActivity.this);
-						messageBox.setTitle("设置日历提醒");
-						messageBox.setMessage("是否创建日历事件提醒？");
-						messageBox.setPositiveButton("是", new DialogInterface.OnClickListener() {
-							
-							 public void onClick(DialogInterface dialog, int which) {  
-					                //确定按钮事件  
-								 
-								 	long calID = 3;
-									long startMillis = 0;
-									long endMillis = 0;
-									
-									Intent intent=getIntent();						
-									String s=new String();
-									s=date.getText().toString();						
-									String[] dateArray=s.split("-");
-									String t=new String();
-									t=time.getText().toString();
-									String[] time=t.split(":");							        
-									
-									Calendar beginTime= Calendar.getInstance();
-									beginTime.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
-									startMillis=beginTime.getTimeInMillis();
-									Calendar endTime = Calendar.getInstance();
-									endTime.set(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1])-1,Integer.parseInt(dateArray[2]),Integer.parseInt(time[0]) , Integer.parseInt(time[1]));
-									endMillis=endTime.getTimeInMillis();
-									
-									ContentResolver cr = getContentResolver();
-									ContentValues values = new ContentValues();
-									values.put(Events.DTSTART, startMillis);		//设置事件的初始时间
-									values.put(Events.DTEND, endMillis);			//设置事件的终止时间
-									values.put(Events.TITLE, intent.getStringExtra("name")+" 餐厅的订餐通知！");			//设置事件标题
-									values.put(Events.DESCRIPTION, "您在"+ intent.getStringExtra("name") +"定了餐！ 时间为："+s+"  "+t+" 请准时前去就餐哦！亲！");		//设置事件内容
-									values.put(Events.CALENDAR_ID, calID);
-									values.put(Events.EVENT_TIMEZONE, "China/Bei_Jing");		//设置时区
-									values.put(Events.HAS_ALARM, 1);		//设置提醒开关
-									Uri uri = cr.insert(Events.CONTENT_URI, values); 		//插入系统日历事件
-									
-									long eventID = Long.parseLong(uri.getLastPathSegment());
-									
-									ContentValues otherValues= new ContentValues();
-									otherValues.put(Events._ID, eventID);
-									otherValues.put(Reminders.EVENT_ID, eventID);
-									otherValues.put(Reminders.MINUTES,10);//设置提前10分钟提醒
-									otherValues.put(Reminders.METHOD, Reminders.METHOD_ALERT);
-									
-									cr.insert(Events.CONTENT_URI, otherValues);  //插入提醒
-									Toast.makeText(RestaurantDetailActivity.this,"插入日历提醒事件成功!",Toast.LENGTH_LONG).show(); 
-									new Thread(runnable).start();
-					                setResult(RESULT_OK);  
-					               // finish();  
-					            }  
-						});
-						messageBox.setNegativeButton("否", new DialogInterface.OnClickListener() {  
-				              
-				            public void onClick(DialogInterface dialog, int which) {  
-				                //取消按钮事件  
-				            	
-				            	new Thread(runnable).start();
-				            }  
-				        });
-						messageBox.show();
-						
-						
-						 
-						
+						new Thread(runnable).start();
 						// TODO 用餐人数，这里需要根据用户的输入修改
-						//new Thread(runnable).start();
+						// new Thread(runnable).start();
 					} catch (Exception e) {
 
 					}
@@ -224,9 +244,11 @@ public class RestaurantDetailActivity extends Activity {
 			// 根据请求返回值得结果码 再进行匹配
 			switch (resultCode) {
 			case RESULT_OK:
-				totalID.setText(data.getStringExtra("totalID"));
-				totalPrice.setText(data.getStringExtra("totalPrice"));
 
+				totalID = data.getStringExtra("totalID");
+				totalName.setText("已点菜品：" + data.getStringExtra("totalName"));
+				totalPrice.setText("共计：" + data.getStringExtra("totalPrice")
+						+ "元");
 				orderDishButton.setText("已点"
 						+ data.getStringExtra("totalDishNum") + "道菜共"
 						+ data.getStringExtra("totalPrice") + "元");
@@ -296,6 +318,111 @@ public class RestaurantDetailActivity extends Activity {
 			if (status == 0) {
 				Toast.makeText(RestaurantDetailActivity.this, "预订成功！",
 						Toast.LENGTH_SHORT).show();
+
+				Builder messageBox = new AlertDialog.Builder(
+						RestaurantDetailActivity.this);
+				messageBox.setTitle("设置日历提醒");
+				messageBox.setMessage("是否创建日历事件提醒？");
+				messageBox.setPositiveButton("是",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// 确定按钮事件
+
+								long calID = 3;
+								long startMillis = 0;
+								long endMillis = 0;
+
+								Intent intent = getIntent();
+								String s = new String();
+								s = date.getText().toString();
+								String[] dateArray = s.split("-");
+								String t = new String();
+								t = time.getText().toString();
+								String[] time = t.split(":");
+
+								Calendar beginTime = Calendar.getInstance();
+								beginTime.set(c.get(Calendar.YEAR),
+										c.get(Calendar.MONTH),
+										c.get(Calendar.DAY_OF_MONTH),
+										c.get(Calendar.HOUR_OF_DAY),
+										c.get(Calendar.MINUTE));
+								startMillis = beginTime.getTimeInMillis();
+								Calendar endTime = Calendar.getInstance();
+								endTime.set(Integer.parseInt(dateArray[0]),
+										Integer.parseInt(dateArray[1]) - 1,
+										Integer.parseInt(dateArray[2]),
+										Integer.parseInt(time[0]),
+										Integer.parseInt(time[1]));
+								endMillis = endTime.getTimeInMillis();
+
+								ContentResolver cr = getContentResolver();
+								ContentValues values = new ContentValues();
+								values.put(Events.DTSTART, startMillis); // 设置事件的初始时间
+								values.put(Events.DTEND, endMillis); // 设置事件的终止时间
+								values.put(Events.TITLE,
+										intent.getStringExtra("name")
+												+ " 餐厅的订餐通知！"); // 设置事件标题
+								values.put(Events.DESCRIPTION,
+										"您在" + intent.getStringExtra("name")
+												+ "定了餐！ 时间为：" + s + "  " + t
+												+ " 请准时前去就餐哦！亲！"); // 设置事件内容
+								values.put(Events.CALENDAR_ID, calID);
+								values.put(Events.EVENT_TIMEZONE,
+										"China/Bei_Jing"); // 设置时区
+								values.put(Events.HAS_ALARM, 1); // 设置提醒开关
+								Uri uri = cr.insert(Events.CONTENT_URI, values); // 插入系统日历事件
+
+								long eventID = Long.parseLong(uri
+										.getLastPathSegment());
+
+								ContentValues otherValues = new ContentValues();
+								otherValues.put(Events._ID, eventID);
+								otherValues.put(Reminders.EVENT_ID, eventID);
+								otherValues.put(Reminders.MINUTES, 120);// 设置提前120分钟提醒
+								otherValues.put(Reminders.METHOD,
+										Reminders.METHOD_ALERT);
+								cr.insert(Events.CONTENT_URI, otherValues); // 插入提醒
+								Toast.makeText(RestaurantDetailActivity.this,
+										"就餐前2小时提醒!", Toast.LENGTH_LONG).show();
+								setResult(RESULT_OK);
+								// finish();
+							}
+						});
+				messageBox.setNegativeButton("否",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// 取消按钮事件
+							}
+						});
+				messageBox.show();
+				// 邀请好友
+				inviteFriends.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						String s = new String();
+						s = date.getText().toString();
+						String t = new String();
+						t = time.getText().toString();
+						Uri smsToUri = Uri.parse("smsto:");
+						Intent intent = new Intent(Intent.ACTION_SENDTO,
+								smsToUri);
+						Toast.makeText(RestaurantDetailActivity.this,
+								"您现在可以邀请好友!", Toast.LENGTH_LONG).show();
+						setResult(RESULT_OK);
+						intent.putExtra("sms_body", "我在"
+								+ restName.getText().toString() + "（"
+								+ restAddress.getText().toString() + "）"
+								+ " 定了餐！  时间是：" + s + "  " + t
+								+ " 请你去吃饭哦！亲！敞开了吃！");
+						startActivity(intent);
+					}
+				});
+
 			} else {
 				Toast.makeText(RestaurantDetailActivity.this,
 						"网络繁忙，预订失败，请重新预订！", Toast.LENGTH_SHORT).show();
@@ -317,9 +444,8 @@ public class RestaurantDetailActivity extends Activity {
 			}
 
 			Response<RestaurantOrder> response = resService.restaurantOrder(
-					restID, phone.getText().toString(), totalID.getText()
-							.toString(), date.getText().toString(), time
-							.getText().toString(), peoplen);
+					restID, phone.getText().toString(), totalID, date.getText()
+							.toString(), time.getText().toString(), peoplen);
 			// String statusString = null;
 			// statusString = response.getStatus().getMessage();
 			Message msg = new Message();
