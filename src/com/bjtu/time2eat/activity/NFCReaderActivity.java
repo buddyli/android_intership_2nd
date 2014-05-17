@@ -76,8 +76,6 @@ public class NFCReaderActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Toast.makeText(NFCReaderActivity.this, getIntent().getAction(),
-				Toast.LENGTH_SHORT).show();
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 			if (readFromTag(getIntent())) {
 				if (result != null) {
