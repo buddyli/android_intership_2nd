@@ -41,6 +41,11 @@ public class InviteFriendActivity extends Activity{
 
 	private Map<Integer, Contact> contactIdMap = null;
 
+	private String restname;
+	private String restaddress;
+	private String date;
+	private String time;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,6 +54,12 @@ public class InviteFriendActivity extends Activity{
 		Button btn_add = (Button) findViewById(R.id.btn_add);
         Button btn_back = (Button) findViewById(R.id.btn_back);
 		
+        Intent intent=getIntent();
+        restname = intent.getStringExtra("restname");
+        restaddress = intent.getStringExtra("restaddress");
+        date = intent.getStringExtra("date");
+        time = intent.getStringExtra("time");
+        
 		contactList.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
@@ -74,19 +85,29 @@ public class InviteFriendActivity extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
-				ArrayList<String> phoneNum =new ArrayList<String>();					
+				ArrayList<String> phoneNum =new ArrayList<String>();
+				ArrayList<String> phoneName =new ArrayList<String>();
 				for(int i=0;i<list.size();i++){
 					if(list.get(i).isChecked==true){
 						phoneNum.add(list.get(i).getPhoneNum());
+						phoneName.add(list.get(i).getDesplayName());
 					}
 				}
 				
 				StringBuffer numberEvery = new StringBuffer();
+				StringBuffer nameEvery = new StringBuffer();
 				for(int j=0;j<phoneNum.size();j++){
 					numberEvery = numberEvery.append(phoneNum.get(j)+",");
+					nameEvery = nameEvery.append(phoneName+",");
 				}
 				Uri uri = Uri.parse("smsto:"+numberEvery.toString());  
-				Intent it = new Intent(Intent.ACTION_SENDTO, uri);  
+				Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+				it.putExtra("sms_body", "我在"
+						+ restname + "（"
+						+ restaddress + "）"
+						+ " 定了餐！  时间是：" + date + "  " + time
+						+ " 请你去吃饭哦！亲！敞开了吃！"
+						+ "来的人有："+nameEvery.toString());
 				startActivity(it);
 			}
 			
