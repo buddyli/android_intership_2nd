@@ -44,12 +44,12 @@ public class NFCReaderActivity extends Activity {
 			Toast.makeText(NFCReaderActivity.this, "请打开系统设置中的NFC选项",
 					Toast.LENGTH_SHORT).show();
 		} else {
-			// initLoadingDialog();
+			 initLoadingDialog();
 		}
 
 	}
 
-	@SuppressWarnings({ "deprecation", "unused" })
+	@SuppressWarnings({ "deprecation" })
 	private void initLoadingDialog() {
 		// 创建ProgressDialog对象
 		m_pDialog = new ProgressDialog(NFCReaderActivity.this);
@@ -87,7 +87,7 @@ public class NFCReaderActivity extends Activity {
 							.fromJson(result, type);
 					if (resp != null) {
 						// 隐藏进度条
-						// m_pDialog.dismiss();
+						 m_pDialog.dismiss();
 
 						Merchant mer = resp.getData().getDetail();
 						Intent intent = new Intent(NFCReaderActivity.this,
