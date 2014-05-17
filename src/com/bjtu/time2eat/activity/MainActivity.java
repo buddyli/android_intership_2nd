@@ -1,13 +1,14 @@
 package com.bjtu.time2eat.activity;
 
-import com.example.time2eat.R;
-
 import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+
+import com.example.time2eat.R;
 
 /**
  * APP入口

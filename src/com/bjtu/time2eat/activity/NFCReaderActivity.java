@@ -18,6 +18,7 @@ import com.bjtu.time2eat.pojo.Merchant;
 import com.bjtu.time2eat.pojo.Response;
 import com.bjtu.time2eat.pojo.resbody.RestaurantDetail;
 import com.bjtu.time2eat.service.RestaurantService;
+import com.example.time2eat.R;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -34,6 +35,7 @@ public class NFCReaderActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_nfc);
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (nfcAdapter == null) {
 			Toast.makeText(NFCReaderActivity.this, "不支持NFC功能...",
@@ -42,12 +44,12 @@ public class NFCReaderActivity extends Activity {
 			Toast.makeText(NFCReaderActivity.this, "请打开系统设置中的NFC选项",
 					Toast.LENGTH_SHORT).show();
 		} else {
-			initLoadingDialog();
+			// initLoadingDialog();
 		}
 
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unused" })
 	private void initLoadingDialog() {
 		// 创建ProgressDialog对象
 		m_pDialog = new ProgressDialog(NFCReaderActivity.this);
@@ -85,7 +87,7 @@ public class NFCReaderActivity extends Activity {
 							.fromJson(result, type);
 					if (resp != null) {
 						// 隐藏进度条
-						m_pDialog.dismiss();
+						// m_pDialog.dismiss();
 
 						Merchant mer = resp.getData().getDetail();
 						Intent intent = new Intent(NFCReaderActivity.this,

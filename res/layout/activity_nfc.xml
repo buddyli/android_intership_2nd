@@ -11,7 +11,8 @@
         android:layout_marginLeft="11dip"
         android:gravity="center_horizontal"
         android:textColor="#000000"
-        android:textSize="20sp" >
+        android:textSize="20sp"
+        android:text="@string/nfc_prompt" >
     </TextView>
 
 </LinearLayout>

@@ -18,5 +18,6 @@
     <string name="inviteFriends">邀请好友</string>
     <string name="res_icon">餐馆图标</string>
     <string name="menu_icon">菜品图标</string>
+    <string name="nfc_prompt">请将手机贴近NFC设备</string>
 
 </resources>
