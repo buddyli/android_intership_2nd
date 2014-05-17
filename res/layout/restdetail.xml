@@ -79,10 +79,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <TextView
+        <Button
             android:id="@+id/showRestAddress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
             android:drawableLeft="@drawable/weizhi"
             android:textSize="30sp" />
     </LinearLayout>
