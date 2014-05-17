@@ -16,7 +16,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class RestaurantService {
-	private Gson gson = (new GsonBuilder()).disableHtmlEscaping().create();
+	public static Gson gson = (new GsonBuilder()).disableHtmlEscaping()
+			.create();
 
 	/**
 	 * 搜索周边餐馆

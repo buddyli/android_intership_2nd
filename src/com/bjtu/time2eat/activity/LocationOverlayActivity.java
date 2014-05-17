@@ -267,10 +267,13 @@ public class LocationOverlayActivity extends Activity {
 							"跳转到餐馆: " + mer.getName(), Toast.LENGTH_SHORT)
 							.show();
 					intent.putExtra("id", mer.getId());
-					intent.putExtra("name","商户名称:"+ mer.getName());
-					intent.putExtra("address","商户地址:"+ mer.getAddress());
-					intent.putExtra("telno","联系电话:"+ mer.getTelno());
-					intent.putExtra("price","平均消费:"+ mer.getPrice());
+					intent.putExtra("name", "商户名称:" + mer.getName());
+					intent.putExtra("address", "商户地址:" + mer.getAddress());
+					intent.putExtra("telno", "联系电话:" + mer.getTelno());
+					intent.putExtra("price", "平均消费:" + mer.getPrice());
+					intent.putExtra("trade_name", mer.getTrade_name());
+					intent.putExtra("star", mer.getM_star());
+					intent.putExtra("distance", "");
 					startActivity(intent);
 					// 点击查看图标，跳转到餐馆详情
 				} else if (index == 1) {

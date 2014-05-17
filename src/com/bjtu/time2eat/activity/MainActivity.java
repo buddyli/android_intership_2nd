@@ -9,6 +9,12 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 
+/**
+ * APP入口
+ * 
+ * @author licb
+ * 
+ */
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 
@@ -28,7 +34,7 @@ public class MainActivity extends Activity {
 		Intent intent2 = new Intent(this, LocationOverlayActivity.class);
 		// Intent intent2 = new Intent(this, MyLocationActivity.class);
 		Intent intent3 = new Intent(this, UserActivity.class);
-		Intent intent4 = new Intent(this, SettingActivity.class);
+		Intent intent4 = new Intent(this, NFCReaderActivity.class);
 		// Intent intent4=new Intent(this, RestaurantListActivity.class);
 		tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("")
 				.setContent(intent1));
