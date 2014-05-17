@@ -48,6 +48,7 @@ public class OrderDishActivity extends ListActivity {
 	Context mContext;
 	private List<String> totalID = new ArrayList<String>();
 	private List<String> totalPrice = new ArrayList<String>();
+	private List<String> totalName = new ArrayList<String>();
 
 	private List<Integer> selectedID = new ArrayList<Integer>();
 	private ProgressDialog m_pDialog;
@@ -123,6 +124,7 @@ public class OrderDishActivity extends ListActivity {
 					builder1.show();*/
 					Intent intent = new Intent();
 					intent.putExtra("totalID", "");//所有菜品ID字符串
+					intent.putExtra("totalName", "");//所有菜品名称字符串
 					intent.putExtra("totalPrice", "0");//所有菜品总价
 					intent.putExtra("totalDishNum", "0");//菜品总个数
 					intent.setClass(OrderDishActivity.this,
@@ -144,7 +146,6 @@ public class OrderDishActivity extends ListActivity {
 					for (int i = 0; i < selectedID.size(); i++) {
 						totaldish++;
 						sb.append("," + totalID.get(selectedID.get(i)));
-
 					}
 					//将菜品的所有ID加上“,”之后赋值给string
 					string = sb.toString();
@@ -155,16 +156,29 @@ public class OrderDishActivity extends ListActivity {
 					totalprice = yesBtn.getText().toString();
 					String str2 = totalprice.substring(5, yesBtn.getText()
 							.toString().length() - 2);// 获得所有菜品总价
+					
+					StringBuilder sb2 = new StringBuilder();
+					String totalNameStr = new String();
+					for (int i = 0; i < selectedID.size(); i++) {
+						sb2.append("," + totalName.get(selectedID.get(i)));
+					}
+					//将菜品的所有ID加上“,”之后赋值给string
+					totalNameStr = sb2.toString();
+					
+					String str3 = totalNameStr.substring(1, totalNameStr.length());// 菜品ID//去掉第一个“，”
+					//
+					
 					Intent intent = new Intent();
 					intent.putExtra("totalID", str);//所有菜品ID字符串
 					intent.putExtra("totalPrice", str2);//所有菜品总价
+					intent.putExtra("totalName", str3);//所有菜品名称
 					intent.putExtra("totalDishNum", String.valueOf(totaldish));//菜品总个数
 					intent.setClass(OrderDishActivity.this,
 							RestaurantDetailActivity.class);					
-					AlertDialog.Builder builder2 = new AlertDialog.Builder(
+					/*AlertDialog.Builder builder2 = new AlertDialog.Builder(
 							OrderDishActivity.this);
 					builder2.setMessage(str2);
-					builder2.show();
+					builder2.show();*/
 					OrderDishActivity.this.setResult(RESULT_OK, intent);
 					OrderDishActivity.this.finish();
 				}
@@ -222,6 +236,7 @@ public class OrderDishActivity extends ListActivity {
 				map.put("price", dishInfo[2]);
 				// map.put("image", dishInfo[3]);
 				totalID.add(dishInfo[0]);
+				totalName.add(dishInfo[1]);
 				totalPrice.add(dishInfo[2]);
 				mChecked.add(false);
 				//
