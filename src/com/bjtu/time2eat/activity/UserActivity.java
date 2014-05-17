@@ -41,7 +41,7 @@ public class UserActivity extends Activity implements OnClickListener {
 			intent.putExtra("mobile", phonetext.getText().toString());
 			break;
 		case R.id.btn_invite_friend: // 邀请好友
-			intent = new Intent(this, InviteFriendActivity.class);
+			intent = new Intent(this, WelcomeFriendActivity.class);
 			break;
 		}
 		startActivity(intent);
